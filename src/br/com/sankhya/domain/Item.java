@@ -10,7 +10,7 @@ public class Item {
 	private String HoraAlteracao;
 	private String HubClientGroup;
 	private int Id;
-	private int IdRegUsu;
+	private int Hash;
 	private int IdUsuarioAlteracao;
 	private int IdUsuarioInclusao;
 	// IgnoreValidate false
@@ -146,12 +146,12 @@ public class Item {
 		Id = id;
 	}
 
-	public int getIdRegUsu() {
-		return IdRegUsu;
+	public int getHash() {
+		return Hash;
 	}
 
-	public void setIdRegUsu(int idRegUsu) {
-		IdRegUsu = idRegUsu;
+	public void setHash(int hash) {
+		Hash = hash;
 	}
 
 	public int getIdUsuarioAlteracao() {

@@ -30,11 +30,15 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 	private static final String getFixedBudgetService = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosFixos";
 	private static final String getMediaOrderService = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosMidia";
 	private static final String getProductionOrderService = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosProducao";
-	private static final String getCustomerService = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetClientes";
 	private static final String getCustomerServiceById = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetClienteByKey?";
 	private static final String getProviderServiceById = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedorByKey?";
-	private static final String getProviderService = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedores";
 	private static final String publiCookie = new PubliBg9ALServiceHelper().Login();
+	
+	private static boolean producao = false;
+	
+	private String getURLEnviroment(String url) {
+		return producao ? url : url.replace("//apibg9.", "//homologaapibg9.");
+	}
 
 	@Override
 	public String Login() {
@@ -43,7 +47,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 
 		try {
 
-			URL url = new URL(loginService);
+			URL url = new URL(getURLEnviroment(loginService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -51,7 +55,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 
 			if (conn.getResponseCode() != 200) {
 				System.out.println("\n\nExcedido o limite de usuários da Base BG9AL. HTTP ERROR: "
-						+ conn.getResponseCode() + " " + loginService + " " + conn.getResponseMessage() + "\n\n");
+						+ conn.getResponseCode() + " " + getURLEnviroment(loginService) + " " + conn.getResponseMessage() + "\n\n");
 			}
 
 			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
@@ -101,9 +105,9 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getMediaOrderService);
+			URL url = new URL(getURLEnviroment(getMediaOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
@@ -160,9 +164,9 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getFixedBudgetService);
+			URL url = new URL(getURLEnviroment(getFixedBudgetService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
@@ -220,9 +224,9 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getStructuredBudgetService);
+			URL url = new URL(getURLEnviroment(getStructuredBudgetService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
@@ -279,9 +283,9 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getProductionOrderService);
+			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setInstanceFollowRedirects(false);
@@ -329,7 +333,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			String obj = "";
 			Gson gson = new Gson();
 
-			URL url = new URL(getCustomerServiceById + "codigo=" + id + "&IdRegUsu=" + publiCookie);
+			URL url = new URL(getURLEnviroment(getCustomerServiceById + "codigo=" + id + "&Hash=" + publiCookie));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -369,7 +373,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			String obj = "";
 			Gson gson = new Gson();
 
-			URL url = new URL(getProviderServiceById + "codigo=" + id + "&IdRegUsu=" + publiCookie);
+			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&Hash=" + publiCookie));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -420,9 +424,9 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getProductionOrderService);
+			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setInstanceFollowRedirects(false);

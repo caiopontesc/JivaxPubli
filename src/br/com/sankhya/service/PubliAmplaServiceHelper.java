@@ -37,6 +37,8 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 	private static final String getProviderServiceById = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedorByKey?";
 	private static final String getProviderService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedores";
 	private static final String publiCookie = new PubliAmplaServiceHelper().Login();
+	
+	private static final boolean producao = false;
 
 	public PubliAmplaServiceHelper() {
 
@@ -48,15 +50,17 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 		String cookie = "";
 
 		try {
+			
+			System.out.println("> Autenticando em " + getURLEnviroment(loginService));
 
-			URL url = new URL(loginService);
+			URL url = new URL(getURLEnviroment(loginService));
 			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
 			if (conn.getResponseCode() != 200) {
 				System.out.println("\n\nExcedido o limite de usuários da Base Ampla. HTTP ERROR: "
-						+ conn.getResponseCode() + " " + loginService + " " + conn.getResponseMessage() + "\n\n");
+						+ conn.getResponseCode() + " " + getURLEnviroment(loginService) + " " + conn.getResponseMessage() + "\n\n");
 			}
 
 			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
@@ -87,6 +91,10 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 
 	}
 
+	private String getURLEnviroment(String url) {
+		return producao ? url : url.replace("//apiduca.", "//homologaapiduca.");
+	}
+
 	@Override
 	public ArrayList<MediaOrder> GetMediaOrderList() throws Exception {
 
@@ -111,9 +119,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getMediaOrderService);
+			URL url = new URL(getURLEnviroment(getMediaOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
@@ -170,9 +178,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getFixedBudgetService);
+			URL url = new URL(getURLEnviroment(getFixedBudgetService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
@@ -230,9 +238,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getProductionOrderService);
+			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setInstanceFollowRedirects(false);
@@ -280,7 +288,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 
 		try {
 
-			URL url = new URL(getCustomerServiceById + "codigo=" + id + "&IdRegUsu=" + publiCookie);
+			URL url = new URL(getURLEnviroment(getCustomerServiceById + "codigo=" + id + "&Hash=" + publiCookie));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -315,7 +323,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			String obj = "";
 			Gson gson = new Gson();
 
-			URL url = new URL(getProviderServiceById + "codigo=" + id + "&IdRegUsu=" + publiCookie);
+			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&Hash=" + publiCookie));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -360,9 +368,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getProductionOrderService);
+			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setInstanceFollowRedirects(false);
@@ -428,9 +436,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getCustomerService);
+			URL url = new URL(getURLEnviroment(getCustomerService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
@@ -491,9 +499,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getProviderService);
+			URL url = new URL(getURLEnviroment(getProviderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
@@ -549,9 +557,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegusu(publiCookie);
+			request.setHash(publiCookie);
 
-			URL url = new URL(getStructuredBudgetService);
+			URL url = new URL(getURLEnviroment(getStructuredBudgetService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");

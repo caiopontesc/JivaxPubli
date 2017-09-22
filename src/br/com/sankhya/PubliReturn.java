@@ -17,8 +17,13 @@ import br.com.sankhya.service.PubliAmplaServiceHelper;
 
 public class PubliReturn {
 
-	private static final String service = "https://homologaapiduca.publicloud.com.br/Services/IntegracaoService.svc/SetSituacao?";
+	private static final String service = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/SetSituacao?";
 	private static final String publiCookie = new PubliAmplaServiceHelper().Login();
+	private static final boolean producao = false;
+	
+	private static String getURLEnviroment(String url) {
+		return producao ? url : url.replace("//apiduca.", "//homologaapiduca.");
+	}
 
 	public static void main(String[] args) throws SQLException {
 
@@ -116,7 +121,7 @@ public class PubliReturn {
 			String obj = "";
 			System.out.println("\n\nAtualizando o documento de número: " + order.getDocNumber());
 
-			URL url = new URL(service + "tipoDocumento=" + order.getDocType() + "&documento=" + order.getDocNumber()
+			URL url = new URL(getURLEnviroment(service) + "tipoDocumento=" + order.getDocType() + "&documento=" + order.getDocNumber()
 					+ "&situacao=" + order.getFlagSituation() + "&dataSituacao=" + order.getDtSituation()
 					+ "&motivoSituacao=Faturamento" + "&empresa=" + order.getCompany() + "&fatura="
 					+ order.getInvoiceNumber() + "&fatura_empresa=" + order.getInvoiceCompany() + "&tipoFatura=" + " "

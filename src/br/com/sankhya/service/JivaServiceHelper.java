@@ -27,6 +27,12 @@ public class JivaServiceHelper {
 	private static final String loadService = "http://jiva.grupoduca.com.br:8180/mge/service.sbr?serviceName=CRUDServiceProvider.loadRecords";
 	private static final String includeOrder = "http://jiva.grupoduca.com.br:8180/mgecom/service.sbr?serviceName=CACSP.incluirNota&mgeSession=";
 
+	private static final boolean producao = false;
+	
+	private static String getURLEnviroment(String url) {
+		return producao ? url : url.replace(":8180/", ":8280/");
+	}
+
 	/**
 	 * 
 	 * @return Token do Jiva
@@ -41,7 +47,7 @@ public class JivaServiceHelper {
 
 			Document doc = br.com.sankhya.common.XmlHelper.MountLogInRequest();
 
-			URL url = new URL(loginService);
+			URL url = new URL(getURLEnviroment(loginService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -81,7 +87,7 @@ public class JivaServiceHelper {
 
 			Document doc = XmlHelper.MountXMLToVerifyIfOrderExists(numNota, tipMov, codEmp);
 
-			URL url = new URL(loadService);
+			URL url = new URL(getURLEnviroment(loadService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -126,7 +132,7 @@ public class JivaServiceHelper {
 
 			Document doc = XmlHelper.MountXMLToInsertMediaOrder(order, customerId, tipoFat, customerId);
 
-			URL url = new URL(includeOrder + cookie);
+			URL url = new URL(getURLEnviroment(includeOrder) + cookie);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -164,7 +170,7 @@ public class JivaServiceHelper {
 
 			Document doc = XmlHelper.MountXMLToInsertProductionOrder(order, fornId, tipoFat, customerId);
 
-			URL url = new URL(includeOrder + cookie);
+			URL url = new URL(getURLEnviroment(includeOrder) + cookie);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -202,7 +208,7 @@ public class JivaServiceHelper {
 
 			Document doc = XmlHelper.MountXMLToInsertFixedBudget(budget, customerId, service, cookie);
 
-			URL url = new URL(includeOrder + cookie);
+			URL url = new URL(getURLEnviroment(includeOrder) + cookie);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -242,7 +248,7 @@ public class JivaServiceHelper {
 
 			Document doc = XmlHelper.MountXMLToVerifyIfCustomerExists(cnpj, codPubli);
 
-			URL url = new URL(loadService);
+			URL url = new URL(getURLEnviroment(loadService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -286,7 +292,7 @@ public class JivaServiceHelper {
 
 			Document doc = XmlHelper.MountXMLToVerifyIfCustomerExists(cnpj, codPubli);
 
-			URL url = new URL(loadService);
+			URL url = new URL(getURLEnviroment(loadService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -324,7 +330,7 @@ public class JivaServiceHelper {
 
 			Document doc = XmlHelper.MountXMLToGetPartnerNameById(id);
 
-			URL url = new URL(loadService);
+			URL url = new URL(getURLEnviroment(loadService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -367,7 +373,7 @@ public class JivaServiceHelper {
 
 			Document doc = XmlHelper.MountXMLToGetAddress(cep);
 
-			URL url = new URL(loadService);
+			URL url = new URL(getURLEnviroment(loadService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -402,12 +408,12 @@ public class JivaServiceHelper {
 		try {
 
 			XMLOutputter xmlOutput = new XMLOutputter();
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
+//			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//			DocumentBuilder builder = factory.newDocumentBuilder();
 
 			Document doc = XmlHelper.MountXMLToUpdateCustomer(customer, customerId);
 
-			URL url = new URL(insertService);
+			URL url = new URL(getURLEnviroment(insertService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -417,8 +423,8 @@ public class JivaServiceHelper {
 			OutputStream reqStream = con.getOutputStream();
 			reqStream.write(xmlOutput.outputString(doc).getBytes());
 
-			InputStream resStream = con.getInputStream();
-			org.w3c.dom.Document document = builder.parse(resStream);
+//			InputStream resStream = con.getInputStream();
+//			org.w3c.dom.Document document = builder.parse(resStream);
 
 			// System.out.println(XmlHelper.getStringFromDoc(document));
 
@@ -457,7 +463,7 @@ public class JivaServiceHelper {
 				doc = XmlHelper.MountXMLToInsertCustomer(customer, address, codPubli);
 			}
 
-			URL url = new URL(insertService);
+			URL url = new URL(getURLEnviroment(insertService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -511,7 +517,7 @@ public class JivaServiceHelper {
 				doc = XmlHelper.MountXMLToInsertProvider(provider, address, codPubli);
 			}
 
-			URL url = new URL(insertService);
+			URL url = new URL(getURLEnviroment(insertService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -548,12 +554,12 @@ public class JivaServiceHelper {
 		try {
 
 			XMLOutputter xmlOutput = new XMLOutputter();
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
+//			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//			DocumentBuilder builder = factory.newDocumentBuilder();
 
 			Document doc = XmlHelper.MountXMLToUpdateProvider(provider, providerId);
 
-			URL url = new URL(insertService);
+			URL url = new URL(getURLEnviroment(insertService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -563,8 +569,8 @@ public class JivaServiceHelper {
 			OutputStream reqStream = con.getOutputStream();
 			reqStream.write(xmlOutput.outputString(doc).getBytes());
 
-			InputStream resStream = con.getInputStream();
-			org.w3c.dom.Document document = builder.parse(resStream);
+//			InputStream resStream = con.getInputStream();
+//			org.w3c.dom.Document document = builder.parse(resStream);
 
 			// System.out.println(XmlHelper.getStringFromDoc(document));
 
@@ -586,7 +592,7 @@ public class JivaServiceHelper {
 
 			Document doc = XmlHelper.MountXMLToGetCustomerCostCenter(id);
 
-			URL url = new URL(loadService);
+			URL url = new URL(getURLEnviroment(loadService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -622,7 +628,7 @@ public class JivaServiceHelper {
 			Document doc = XmlHelper.MountXMLToInsertPublicationAuth(order, customerId, providerId, providerCNPJ,
 					cookie);
 
-			URL url = new URL(includeOrder + cookie);
+			URL url = new URL(getURLEnviroment(includeOrder) + cookie);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");

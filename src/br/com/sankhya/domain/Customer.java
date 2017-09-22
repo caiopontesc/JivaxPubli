@@ -9,7 +9,7 @@ public class Customer {
 	private String DataManutencao;
 	private String HoraAlteracao;
 	private int Id;
-	private int IdRegUsu;
+	private int Hash;
 	private int IdUsuarioAlteracao;
 	private int IdUsuarioInclusao;
 	private String UsuarioAlteracao;
@@ -191,12 +191,12 @@ public class Customer {
 		Id = id;
 	}
 
-	public int getIdRegUsu() {
-		return IdRegUsu;
+	public int getHash() {
+		return Hash;
 	}
 
-	public void setIdRegUsu(int idRegUsu) {
-		IdRegUsu = idRegUsu;
+	public void setHash(int hash) {
+		Hash = hash;
 	}
 
 	public int getIdUsuarioAlteracao() {
