@@ -69,13 +69,9 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
 			System.out.println(e.getMessage());
-
 		} catch (IOException e) {
-
 			System.out.println(e.getMessage());
-
 		}
 
 		if (cookie == null || cookie.isEmpty() || cookie.equals("0")) {
@@ -87,7 +83,6 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 
 	@Override
 	public ArrayList<MediaOrder> GetMediaOrderList() throws Exception {
-
 		ArrayList<MediaOrder> list = new ArrayList<MediaOrder>();
 
 		try {
@@ -105,7 +100,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getMediaOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -133,11 +128,8 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
 			System.out.println(e.getMessage());
-
 		} catch (IOException e) {
-
 			System.out.println(e.getMessage());
 		}
 
@@ -164,7 +156,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getFixedBudgetService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -192,13 +184,9 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
 			System.out.println(e.getMessage());
-
 		} catch (IOException e) {
-
 			System.out.println(e.getMessage());
-
 		}
 
 		return list;
@@ -224,7 +212,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getStructuredBudgetService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -251,11 +239,8 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
 			e.printStackTrace();
-
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		}
 
@@ -283,7 +268,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -312,11 +297,8 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
 			e.printStackTrace();
-
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		}
 
@@ -333,7 +315,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			String obj = "";
 			Gson gson = new Gson();
 
-			URL url = new URL(getURLEnviroment(getCustomerServiceById + "codigo=" + id + "&Hash=" + publiCookie));
+			URL url = new URL(getURLEnviroment(getCustomerServiceById + "codigo=" + id + "&hash=" + publiCookie));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -351,13 +333,9 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
 			System.out.println(e.getMessage());
-
 		} catch (IOException e) {
-
 			System.out.println(e.getMessage());
-
 		}
 
 		return customer;
@@ -373,7 +351,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			String obj = "";
 			Gson gson = new Gson();
 
-			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&Hash=" + publiCookie));
+			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&hash=" + publiCookie));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -391,13 +369,9 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
 			System.out.println(e.getMessage());
-
 		} catch (IOException e) {
-
 			System.out.println(e.getMessage());
-
 		}
 
 		return provider;
@@ -424,7 +398,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -453,11 +427,8 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
 			e.printStackTrace();
-
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		}
 

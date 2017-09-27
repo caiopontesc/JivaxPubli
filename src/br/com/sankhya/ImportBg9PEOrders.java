@@ -1,7 +1,5 @@
 package br.com.sankhya;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 
 import org.cuckoo.core.ScheduledAction;
@@ -70,9 +68,10 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 
 		} catch (Exception e) {
 
-			StringWriter errors = new StringWriter();
-			e.printStackTrace(new PrintWriter(errors));
-			System.out.println(errors.toString());
+//			StringWriter errors = new StringWriter();
+//			e.printStackTrace(new PrintWriter(errors));
+//			System.out.println(errors.toString());
+			e.printStackTrace();
 
 		}
 

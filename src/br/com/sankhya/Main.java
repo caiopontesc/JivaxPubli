@@ -30,9 +30,7 @@ public class Main {
 			System.out.println("\n\n...Processo Finalizado.");
 
 		} catch (Exception e) {
-
 			System.out.println(e.getMessage());
-
 		}
 
 	}
@@ -43,8 +41,6 @@ public class Main {
 
 			InsertFixedBudgets();
 			InsertPublicationAuth();
-
-
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -337,20 +333,10 @@ public class Main {
 	 * @return
 	 */
 	public static int RelationCompany(int codPubli) {
-
-		int codJiva = 0;
-
-		if (codPubli == amplaPE) {
-
-			codJiva = 2;
-
-		} else {
-
-			codJiva = 3;
-
-		}
-
-		return codJiva;
+		if (codPubli == amplaPE)
+			return 2;
+		
+		return 3;
 	}
 
 }

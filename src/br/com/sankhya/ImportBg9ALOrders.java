@@ -1,5 +1,7 @@
 package br.com.sankhya;
 
+import static br.com.sankhya.common.Utils.RemoveSpecialCharacters;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -7,7 +9,6 @@ import java.util.ArrayList;
 import org.cuckoo.core.ScheduledAction;
 import org.cuckoo.core.ScheduledActionContext;
 
-import br.com.sankhya.common.Utils;
 import br.com.sankhya.domain.Customer;
 import br.com.sankhya.domain.FixedBudget;
 import br.com.sankhya.domain.MediaOrder;
@@ -17,8 +18,6 @@ import br.com.sankhya.extensions.actionbutton.AcaoRotinaJava;
 import br.com.sankhya.extensions.actionbutton.ContextoAcao;
 import br.com.sankhya.service.JivaServiceHelper;
 import br.com.sankhya.service.PubliBg9ALServiceHelper;
-
-import static br.com.sankhya.common.Utils.RemoveSpecialCharacters;
 
 public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 

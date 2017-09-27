@@ -10,19 +10,19 @@ public class PubliGetListParam {
 	private String Limit;
 	private int OffSet;
 	private String Options;
-	private String Hash;
+	private String IdRegusu;
 
 	public PubliGetListParam() {
 		this.setFields(new ArrayList<String>());
 		this.setFilters(new ArrayList<Filter>());
 	}
 
-	public String getHash() {
-		return Hash;
+	public String getIdRegUsu() {
+		return IdRegusu;
 	}
 
-	public void setHash(String hash) {
-		Hash = hash;
+	public void setIdRegUsu(String idRegUsu) {
+		IdRegusu = idRegUsu;
 	}
 
 	public ArrayList<String> getFields() {

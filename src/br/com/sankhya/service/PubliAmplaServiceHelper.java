@@ -37,7 +37,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 	private static final String getProviderServiceById = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedorByKey?";
 	private static final String getProviderService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedores";
 	private static final String publiCookie = new PubliAmplaServiceHelper().Login();
-	
+
 	private static final boolean producao = false;
 
 	public PubliAmplaServiceHelper() {
@@ -50,7 +50,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 		String cookie = "";
 
 		try {
-			
+
 			System.out.println("> Autenticando em " + getURLEnviroment(loginService));
 
 			URL url = new URL(getURLEnviroment(loginService));
@@ -59,8 +59,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
 			if (conn.getResponseCode() != 200) {
-				System.out.println("\n\nExcedido o limite de usuários da Base Ampla. HTTP ERROR: "
-						+ conn.getResponseCode() + " " + getURLEnviroment(loginService) + " " + conn.getResponseMessage() + "\n\n");
+				System.out.println(
+						"\n\nExcedido o limite de usuários da Base Ampla. HTTP ERROR: " + conn.getResponseCode() + " "
+								+ getURLEnviroment(loginService) + " " + conn.getResponseMessage() + "\n\n");
 			}
 
 			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
@@ -74,7 +75,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
+			
 			System.out.println(e.getMessage());
 
 		} catch (IOException e) {
@@ -119,7 +120,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getMediaOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -178,7 +179,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getFixedBudgetService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -195,8 +196,6 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 
 			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
 
-			// System.out.println(obj);
-
 			Type listType = new TypeToken<ArrayList<FixedBudget>>() {
 			}.getType();
 
@@ -205,13 +204,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
 			System.out.println(e.getMessage());
-
 		} catch (IOException e) {
-
 			System.out.println(e.getMessage());
-
 		}
 
 		return list;
@@ -238,7 +233,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -288,7 +283,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 
 		try {
 
-			URL url = new URL(getURLEnviroment(getCustomerServiceById + "codigo=" + id + "&Hash=" + publiCookie));
+			URL url = new URL(getURLEnviroment(getCustomerServiceById + "codigo=" + id + "&hash=" + publiCookie));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -323,7 +318,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			String obj = "";
 			Gson gson = new Gson();
 
-			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&Hash=" + publiCookie));
+			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&hash=" + publiCookie));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -368,7 +363,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -436,7 +431,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getCustomerService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -499,7 +494,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getProviderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -557,7 +552,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setHash(publiCookie);
+			request.setIdRegUsu(publiCookie);
 
 			URL url = new URL(getURLEnviroment(getStructuredBudgetService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
