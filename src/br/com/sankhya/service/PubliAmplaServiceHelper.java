@@ -75,7 +75,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-			
+
 			System.out.println(e.getMessage());
 
 		} catch (IOException e) {
@@ -117,7 +117,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("DATA_APROV", "2017-01-01",
 			// 7, 1, 0, false));
 			request.setFreeFilter("");
-			// request.setLimit("50");
+			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
@@ -176,7 +176,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("#Numero#", "40407", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			// request.setLimit("15");
+			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
@@ -318,7 +318,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			String obj = "";
 			Gson gson = new Gson();
 
-			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&hash=" + publiCookie));
+			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&idRegUsu=" + publiCookie));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
