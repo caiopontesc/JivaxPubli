@@ -207,7 +207,7 @@ public class JivaServiceHelper {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 
 			Document doc = XmlHelper.MountXMLToInsertFixedBudget(budget, customerId, service, cookie);
-
+			
 			URL url = new URL(getURLEnviroment(includeOrder) + cookie);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);

@@ -989,16 +989,19 @@ public class XmlHelper {
 			Element codProd = new Element("CODPROD");
 
 			switch (budget.getSubTipo()) {
-
-			case executiveProd:
-				codProd.setText("680");
-			case eletronicProd:
-				codProd.setText("677");
-			case graphicProd:
-				codProd.setText("676");
-			case digitalProd:
-				 codProd.setText("678");
-			default:
+				case executiveProd:
+					codProd.setText("680");
+					break;
+				case eletronicProd:
+					codProd.setText("677");
+					break;
+				case graphicProd:
+					codProd.setText("676");
+					break;
+				case digitalProd:
+					 codProd.setText("678");
+					 break;
+				default:
 
 			}
 
@@ -1093,12 +1096,16 @@ public class XmlHelper {
 						switch (budget.getSubTipo()) {
 							case executiveProd:
 								codProd2.setText("665");
+								break;
 							case eletronicProd:
 								codProd2.setText("664");
+								break;
 							case graphicProd:
 								codProd2.setText("663");
+								break;
 							case digitalProd:
 								codProd2.setText("666");
+								break;
 						}
 
 						Element codVol2 = new Element("CODVOL");
@@ -1255,15 +1262,18 @@ public class XmlHelper {
 						Element codProd2 = new Element("CODPROD");
 
 						switch (obj.getSubTipo()) {
-
-						case executiveProd:
-							codProd2.setText("665");
-						case eletronicProd:
-							codProd2.setText("664");
-						case graphicProd:
-							codProd2.setText("663");
-						case digitalProd:
-							codProd2.setText("666");
+							case executiveProd:
+								codProd2.setText("665");
+								break;
+							case eletronicProd:
+								codProd2.setText("664");
+								break;
+							case graphicProd:
+								codProd2.setText("663");
+								break;
+							case digitalProd:
+								codProd2.setText("666");
+								break;
 						}
 
 						Element codVol2 = new Element("CODVOL");
@@ -1483,16 +1493,20 @@ public class XmlHelper {
 			Element nunotaIte = new Element("NUNOTA");
 			Element sequencia = new Element("SEQUENCIA");
 			Element codProd = new Element("CODPROD");
+			
 			switch (order.getSubTipo()) {
-
-			case executiveProd:
-				codProd.setText("665");
-			case eletronicProd:
-				codProd.setText("664");
-			case graphicProd:
-				codProd.setText("663");
-			default:
-				codProd.setText("666");
+				case executiveProd:
+					codProd.setText("665");
+					break;
+				case eletronicProd:
+					codProd.setText("664");
+					break;
+				case graphicProd:
+					codProd.setText("663");
+					break;
+				default:
+					codProd.setText("666");
+					break;
 			}
 
 			Element codVol = new Element("CODVOL");

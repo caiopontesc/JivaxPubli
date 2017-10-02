@@ -793,4 +793,8 @@ public class FixedBudget {
 
 	}
 
+	@Override
+	public String toString() {
+		return "FixedBudget [Numero=" + Numero + ", SubTipo=" + SubTipo + "]";
+	}
 }

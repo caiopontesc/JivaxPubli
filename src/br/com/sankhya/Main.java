@@ -134,9 +134,8 @@ public class Main {
 		try {
 
 			ArrayList<FixedBudget> budgetList = amplaServices.GetFixedBudgetList();
-
+			
 			for (FixedBudget item : budgetList) {
-
 				Customer customer = amplaServices.GetCustomerById(item.getCodigoCliente());
 
 				String customerId = "";
@@ -215,7 +214,6 @@ public class Main {
 							Integer.toString(customer.getCodigo())) == false) {
 
 						JivaServiceHelper.InsertCustomer(customer, jivaCookie, Integer.toString(customer.getCodigo()));
-						;
 
 					} else {
 
