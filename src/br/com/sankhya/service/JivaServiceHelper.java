@@ -27,7 +27,7 @@ public class JivaServiceHelper {
 	private static final String loadService = "http://jiva.grupoduca.com.br:8180/mge/service.sbr?serviceName=CRUDServiceProvider.loadRecords";
 	private static final String includeOrder = "http://jiva.grupoduca.com.br:8180/mgecom/service.sbr?serviceName=CACSP.incluirNota&mgeSession=";
 
-	private static final boolean producao = false;
+	private static final boolean producao = true;
 	
 	private static String getURLEnviroment(String url) {
 		return producao ? url : url.replace(":8180/", ":8280/");

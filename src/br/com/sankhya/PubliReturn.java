@@ -19,7 +19,7 @@ public class PubliReturn {
 
 	private static final String service = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/SetSituacao?";
 	private static final String publiCookie = new PubliAmplaServiceHelper().Login();
-	private static final boolean producao = false;
+	private static final boolean producao = true;
 	
 	private static String getURLEnviroment(String url) {
 		return producao ? url : url.replace("//apiduca.", "//homologaapiduca.");

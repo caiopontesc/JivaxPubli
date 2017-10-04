@@ -34,7 +34,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 	private static final String getProviderServiceById = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedorByKey?";
 	private static final String publiCookie = new PubliBg9PEServiceHelper().Login();
 
-	private static final boolean producao = false;
+	private static final boolean producao = true;
 	
 	private String getURLEnviroment(String url) {
 		return producao ? url : url.replace("//apibg9.", "//homologaapibg9.");
@@ -309,7 +309,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			String obj = "";
 			Gson gson = new Gson();
 
-			URL url = new URL(getURLEnviroment(getProviderServiceById) + "codigo=" + id + "&hash=" + publiCookie);
+			URL url = new URL(getURLEnviroment(getProviderServiceById) + "codigo=" + id + "&idRegUsu=" + publiCookie);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");

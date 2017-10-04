@@ -38,7 +38,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 	private static final String getProviderService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedores";
 	private static final String publiCookie = new PubliAmplaServiceHelper().Login();
 
-	private static final boolean producao = false;
+	private static final boolean producao = true;
 
 	public PubliAmplaServiceHelper() {
 
