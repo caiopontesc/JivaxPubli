@@ -230,7 +230,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			// request.setLimit("50");
+			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
@@ -360,7 +360,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			// request.setLimit("50");
+			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);

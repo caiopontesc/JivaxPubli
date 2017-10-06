@@ -53,27 +53,14 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 
 	public static void Bg9PE() throws Exception {
 
-		try {
+		// ctx.confirmar("Importar Processos BG9PE",
+		// "Ao clicar em OK o integrador efetuará a importação dos processos
+		// da BG9PE. Deseja continuar?", 1);
 
-			// ctx.confirmar("Importar Processos BG9PE",
-			// "Ao clicar em OK o integrador efetuará a importação dos processos
-			// da BG9PE. Deseja continuar?", 1);
+		InsertFixedBudgets();
+		InsertPublicationAuth();
 
-
-			InsertFixedBudgets();
-			InsertPublicationAuth();
-
-
-			// ctx.setMensagemRetorno("Processo de Importação Finalizado!");
-
-		} catch (Exception e) {
-
-//			StringWriter errors = new StringWriter();
-//			e.printStackTrace(new PrintWriter(errors));
-//			System.out.println(errors.toString());
-			e.printStackTrace();
-
-		}
+		// ctx.setMensagemRetorno("Processo de Importação Finalizado!");
 
 	}
 

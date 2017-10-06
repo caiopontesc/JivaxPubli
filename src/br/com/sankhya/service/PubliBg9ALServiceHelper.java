@@ -34,7 +34,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 	private static final String getProviderServiceById = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedorByKey?";
 	private static final String publiCookie = new PubliBg9ALServiceHelper().Login();
 	
-	private static boolean producao = true;
+	private static final boolean producao = true;
 	
 	private String getURLEnviroment(String url) {
 		return producao ? url : url.replace("//apibg9.", "//homologaapibg9.");
@@ -97,7 +97,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("#PlanilhaNumero#", "18126",
 			// 9, 1, 0, false));
 			request.setFreeFilter("");
-			// request.setLimit("50");
+			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
@@ -153,7 +153,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("#Numero#", "11129", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			// request.setLimit("15");
+			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
@@ -265,7 +265,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			// request.setLimit("50");
+			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
@@ -395,7 +395,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			// request.setLimit("50");
+			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
