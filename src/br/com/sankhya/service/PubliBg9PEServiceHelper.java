@@ -46,6 +46,8 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 		String cookie = "";
 
 		try {
+			
+			System.out.println("> Autenticando em " + getURLEnviroment(loginService));
 
 			URL url = new URL(getURLEnviroment(loginService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -69,12 +71,12 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
-//			System.out.println(e.getMessage());
+//			e.printStackTrace();
+			System.out.println(e.getMessage());
 
 		} catch (IOException e) {
-			e.printStackTrace();
-//			System.out.println(e.getMessage());
+//			e.printStackTrace();
+			System.out.println(e.getMessage());
 
 		}
 
@@ -104,7 +106,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("#Numero#", "60084", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			// request.setLimit("50");
+			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
@@ -163,7 +165,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("#Numero#", "11194", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			// request.setLimit("15");
+			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
@@ -223,7 +225,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			// request.setLimit("50");
+			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
@@ -351,7 +353,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			// request.setLimit("50");
+			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
