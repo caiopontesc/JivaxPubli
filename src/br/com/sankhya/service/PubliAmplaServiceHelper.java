@@ -176,7 +176,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("#Numero#", "40407", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			request.setLimit("15");
+			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);

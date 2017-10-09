@@ -140,8 +140,6 @@ public class Main {
 
 				String customerId = "";
 
-				System.out.println(Utils.ConvertMSJSONDateToDate(item.getVencimento()));
-
 				if (customer != null && !customer.getSituacao().isEmpty()) {
 
 					if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
