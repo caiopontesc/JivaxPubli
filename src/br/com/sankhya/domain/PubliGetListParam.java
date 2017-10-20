@@ -73,4 +73,9 @@ public class PubliGetListParam {
 		Options = options;
 	}
 
+	@Override
+	public String toString() {
+		return "PubliGetListParam [Limit=" + Limit + ", OffSet=" + OffSet + "]";
+	}
+
 }

@@ -702,7 +702,7 @@ public class ProductionOrder {
 	}
 
 	public void setVencimento(String Vencimento) {
-		Vencimento = Vencimento;
+		this.Vencimento = Vencimento;
 	}
 
 	public String getAcabamento() {

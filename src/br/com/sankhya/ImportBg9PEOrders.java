@@ -72,7 +72,7 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 		try {
 
 			ArrayList<MediaOrder> mediaOrderList = bg9PEServices.GetMediaOrderList();
-
+			
 			for (MediaOrder item : mediaOrderList) {
 
 				Customer customer = bg9PEServices.GetCustomerById(item.getCodigoCliente());

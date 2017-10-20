@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -38,7 +39,8 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 	private static final String getProviderService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedores";
 	private static final String publiCookie = new PubliAmplaServiceHelper().Login();
 
-	private static final boolean producao = true;
+	private static final boolean producao = false;
+	private static final int LIMIT = 50;
 
 	public PubliAmplaServiceHelper() {
 
@@ -100,6 +102,8 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 	public ArrayList<MediaOrder> GetMediaOrderList() throws Exception {
 
 		ArrayList<MediaOrder> list = new ArrayList<MediaOrder>();
+		Collection<? extends MediaOrder> fromJson = new ArrayList<MediaOrder>();
+		int offset = 0;
 
 		try {
 
@@ -117,34 +121,40 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("DATA_APROV", "2017-01-01",
 			// 7, 1, 0, false));
 			request.setFreeFilter("");
-			request.setLimit("50");
-			request.setOffSet(0);
+			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
 
-			URL url = new URL(getURLEnviroment(getMediaOrderService));
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", "application/json");
-			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
+			do {
+				
+				request.setOffSet(offset);
+				
+				URL url = new URL(getURLEnviroment(getMediaOrderService));
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setDoOutput(true);
+				conn.setRequestMethod("POST");
+				conn.setRequestProperty("Content-Type", "application/json");
+				conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
-			String input = gson.toJson(request);
+				String input = gson.toJson(request);
 
-			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
-			os.flush();
+				OutputStream os = conn.getOutputStream();
+				os.write(input.getBytes());
+				os.flush();
 
-			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
+				obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
 
-			// System.out.println(obj);
+				Type listType = new TypeToken<ArrayList<MediaOrder>>() {
+				}.getType();
 
-			Type listType = new TypeToken<ArrayList<MediaOrder>>() {
-			}.getType();
-
-			list = gson.fromJson(obj, listType);
-
-			conn.disconnect();
+				fromJson = gson.fromJson(obj, listType);
+				list.addAll(fromJson);
+				
+				conn.disconnect();
+				
+				offset++;
+				
+			} while (!fromJson.isEmpty() && fromJson.size() == LIMIT);
 
 		} catch (MalformedURLException e) {
 
@@ -162,8 +172,10 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 	@Override
 	public ArrayList<FixedBudget> GetFixedBudgetList() throws Exception {
 
+		ArrayList<FixedBudget> fromJson = new ArrayList<FixedBudget>();
 		ArrayList<FixedBudget> list = new ArrayList<FixedBudget>();
-
+		int offset = 0;
+		
 		try {
 
 			String obj = "";
@@ -176,39 +188,47 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("#Numero#", "40407", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			request.setLimit("50");
-			request.setOffSet(0);
+			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
 
-			URL url = new URL(getURLEnviroment(getFixedBudgetService));
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
+			do {
+				
+				request.setOffSet(offset);
+				
+				URL url = new URL(getURLEnviroment(getFixedBudgetService));
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setDoOutput(true);
+				conn.setRequestMethod("POST");
+				conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+				conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
-			String input = gson.toJson(request);
+				String input = gson.toJson(request);
+				
+				OutputStream os = conn.getOutputStream();
+				os.write(input.getBytes());
+				os.flush();
 
-			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
-			os.flush();
+				obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
 
-			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
+				Type listType = new TypeToken<ArrayList<FixedBudget>>() {
+				}.getType();
 
-			Type listType = new TypeToken<ArrayList<FixedBudget>>() {
-			}.getType();
+				fromJson = gson.fromJson(obj, listType);
+				list.addAll(fromJson);
 
-			list = gson.fromJson(obj, listType);
-
-			conn.disconnect();
+				conn.disconnect();
+				
+				offset++;
+				
+			} while (!fromJson.isEmpty() && fromJson.size() == LIMIT);
 
 		} catch (MalformedURLException e) {
 			System.out.println(e.getMessage());
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-
+		
 		return list;
 
 	}

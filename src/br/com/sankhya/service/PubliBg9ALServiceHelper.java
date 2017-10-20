@@ -35,6 +35,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 	private static final String publiCookie = new PubliBg9ALServiceHelper().Login();
 	
 	private static final boolean producao = true;
+	private static final int LIMIT = 50;
 	
 	private String getURLEnviroment(String url) {
 		return producao ? url : url.replace("//apibg9.", "//homologaapibg9.");
@@ -86,6 +87,8 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 	@Override
 	public ArrayList<MediaOrder> GetMediaOrderList() throws Exception {
 		ArrayList<MediaOrder> list = new ArrayList<MediaOrder>();
+		ArrayList<MediaOrder> fromJson = new ArrayList<MediaOrder>();
+		int offset = 0;
 
 		try {
 
@@ -99,35 +102,41 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("#PlanilhaNumero#", "18126",
 			// 9, 1, 0, false));
 			request.setFreeFilter("");
-			request.setLimit("50");
-			request.setOffSet(0);
+			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
 
-			URL url = new URL(getURLEnviroment(getMediaOrderService));
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
-			// conn.connect();
+			do {
 
-			String input = gson.toJson(request);
+				request.setOffSet(offset);
+				
+				URL url = new URL(getURLEnviroment(getMediaOrderService));
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setDoOutput(true);
+				conn.setRequestMethod("POST");
+				conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+				conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
+				// conn.connect();
 
-			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
-			os.flush();
+				String input = gson.toJson(request);
 
-			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
+				OutputStream os = conn.getOutputStream();
+				os.write(input.getBytes());
+				os.flush();
 
-			Type listType = new TypeToken<ArrayList<MediaOrder>>() {
-			}.getType();
+				obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
 
-			// System.out.println(obj);
+				Type listType = new TypeToken<ArrayList<MediaOrder>>() {
+				}.getType();
 
-			list = gson.fromJson(obj, listType);
+				fromJson = gson.fromJson(obj, listType);
+				list.addAll(fromJson);
 
-			conn.disconnect();
+				conn.disconnect();
+				
+				offset++;
+				
+			} while (!fromJson.isEmpty() && fromJson.size() == LIMIT);
 
 		} catch (MalformedURLException e) {
 			System.out.println(e.getMessage());
@@ -142,6 +151,8 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 	public ArrayList<FixedBudget> GetFixedBudgetList() throws Exception {
 
 		ArrayList<FixedBudget> list = new ArrayList<FixedBudget>();
+		ArrayList<FixedBudget> fromJson = new ArrayList<FixedBudget>();
+		int offset = 0;
 
 		try {
 
@@ -155,35 +166,40 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			// request.getFilters().add(new Filter("#Numero#", "11129", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
-			request.setLimit("15");
-			request.setOffSet(0);
+			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
 			request.setIdRegUsu(publiCookie);
 
-			URL url = new URL(getURLEnviroment(getFixedBudgetService));
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
-			// conn.connect();
+			do {
+				
+				request.setOffSet(offset);
 
-			String input = gson.toJson(request);
+				URL url = new URL(getURLEnviroment(getFixedBudgetService));
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setDoOutput(true);
+				conn.setRequestMethod("POST");
+				conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+				conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
-			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
-			os.flush();
+				String input = gson.toJson(request);
 
-			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
+				OutputStream os = conn.getOutputStream();
+				os.write(input.getBytes());
+				os.flush();
 
-			// System.out.println(obj);
+				obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
 
-			Type listType = new TypeToken<ArrayList<FixedBudget>>() {
-			}.getType();
+				Type listType = new TypeToken<ArrayList<FixedBudget>>() {
+				}.getType();
 
-			list = gson.fromJson(obj, listType);
+				fromJson = gson.fromJson(obj, listType);
+				list.addAll(fromJson);
 
-			conn.disconnect();
+				conn.disconnect();
+				
+				offset++;
+				
+			} while (!fromJson.isEmpty() && fromJson.size() == LIMIT);
 
 		} catch (MalformedURLException e) {
 			System.out.println(e.getMessage());

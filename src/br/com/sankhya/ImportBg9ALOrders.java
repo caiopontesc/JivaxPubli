@@ -83,7 +83,7 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 		try {
 
 			ArrayList<MediaOrder> mediaOrderList = bg9ALServices.GetMediaOrderList();
-
+			
 			for (MediaOrder item : mediaOrderList) {
 
 				Customer customer = bg9ALServices.GetCustomerById(item.getCodigoCliente());
@@ -168,9 +168,7 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 
 			for (FixedBudget item : budgetList) {
 
-				Customer customer = new Customer();
-
-				customer = bg9ALServices.GetCustomerById(item.getCodigoCliente());
+				Customer customer = bg9ALServices.GetCustomerById(item.getCodigoCliente());
 
 				String customerId = "";
 
