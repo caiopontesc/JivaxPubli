@@ -30,7 +30,7 @@ public class JivaServiceHelper {
 	private static final boolean producao = false;
 	
 	private static String getURLEnviroment(String url) {
-		return producao ? url : url.replace(":8180/", ":8280/");
+		return producao ? url : url.replace(":8180/", ":8380/");
 	}
 
 	/**
