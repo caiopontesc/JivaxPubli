@@ -10,7 +10,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.jdom.Document;
 import org.jdom.output.XMLOutputter;
+import org.w3c.dom.Node;
 
+import br.com.sankhya.common.Base64Utils;
 import br.com.sankhya.common.Utils;
 import br.com.sankhya.common.XmlHelper;
 import br.com.sankhya.domain.Address;
@@ -27,7 +29,7 @@ public class JivaServiceHelper {
 	private static final String loadService = "http://jiva.grupoduca.com.br:8180/mge/service.sbr?serviceName=CRUDServiceProvider.loadRecords";
 	private static final String includeOrder = "http://jiva.grupoduca.com.br:8180/mgecom/service.sbr?serviceName=CACSP.incluirNota&mgeSession=";
 
-	private static final boolean producao = false;
+	private static final boolean producao = true;
 	
 	private static String getURLEnviroment(String url) {
 		return producao ? url : url.replace(":8180/", ":8380/");
@@ -192,7 +194,7 @@ public class JivaServiceHelper {
 	}
 
 	/**
-	 * Insere OCs
+	 * Insere OCs (Producao)
 	 * 
 	 * @param budget
 	 * @param cookie
@@ -221,7 +223,17 @@ public class JivaServiceHelper {
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
 
-			System.out.println(XmlHelper.getStringFromDoc(document));
+			Node itemNuNota = document.getElementsByTagName("NUNOTA").item(0);
+			String nuNota = itemNuNota != null ? itemNuNota.getTextContent() : null;
+			
+			if (nuNota == null || nuNota.isEmpty()) {
+				String erro = document.getElementsByTagName("statusMessage").item(0).getTextContent();
+				System.out.println("ERRO ao importar a OC " + budget.getNumero() + ": " + Base64Utils.decode(erro));
+			} else {
+				System.out.println("Pedido " + nuNota + " (Nro Unico) importado.");
+			}
+			
+//			System.out.println(XmlHelper.getStringFromDoc(document));
 
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -477,10 +489,11 @@ public class JivaServiceHelper {
 			org.w3c.dom.Document document = builder.parse(resStream);
 
             if(!wasSuccessful(document)){
-                System.out.println("Não foi possível adicionar o cliente: " + customer.getNome() +  " ao Jiva. Deverá ser adicionar manualmente.");
+                System.out.println("Não foi possível adicionar o cliente: " + customer.getNome() +  " ao Jiva. Deverá ser adicionado manualmente.");
+//                System.out.println("Motivo: " + Base64Utils.decode(XmlHelper.getStringFromDoc(document)));
             }
 
-			// System.out.println(XmlHelper.getStringFromDoc(document));
+//			 System.out.println(XmlHelper.getStringFromDoc(document));
 
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -531,7 +544,8 @@ public class JivaServiceHelper {
 			org.w3c.dom.Document document = builder.parse(resStream);
 
             if(!wasSuccessful(document)){
-                System.out.println("Não foi possível adicionar o fornecedor: " + provider.getNome() +  " ao Jiva. Deverá ser adicionar manualmente.");
+                System.out.println("Não foi possível adicionar o fornecedor: " + provider.getNome() +  " ao Jiva. Deverá ser adicionado manualmente.");
+//                System.out.println("Motivo: " + Base64Utils.decode(XmlHelper.getStringFromDoc(document)));
             }
 
 			// System.out.println(XmlHelper.getStringFromDoc(document));
@@ -641,7 +655,14 @@ public class JivaServiceHelper {
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
 
-			System.out.println(XmlHelper.getStringFromDoc(document));
+			Node itemNuNota = document.getElementsByTagName("NUNOTA").item(0);
+			String nuNota = itemNuNota != null ? itemNuNota.getTextContent() : null;
+			if (nuNota == null || nuNota.isEmpty()) {
+				String erro = document.getElementsByTagName("statusMessage").item(0).getTextContent();
+				System.out.println("ERRO ao importar a MÍDIA " + order.getPlanilhaNumero() + ": " + Base64Utils.decode(erro));
+			} else {
+				System.out.println("Pedido " + nuNota + " (Nro Unico) importado.");
+			}
 
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -653,7 +674,7 @@ public class JivaServiceHelper {
 	public static boolean wasSuccessful(org.w3c.dom.Document doc){
 
 		try {
-
+			
 			String added = doc.getElementsByTagName("CODPARC").item(0).getTextContent();
 
 			if(added != null && !added.isEmpty()){

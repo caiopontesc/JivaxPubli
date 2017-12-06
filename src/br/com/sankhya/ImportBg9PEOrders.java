@@ -73,6 +73,9 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 
 			ArrayList<MediaOrder> mediaOrderList = bg9PEServices.GetMediaOrderList();
 			
+//			System.out.println("PLANILHA - MIDIA");
+//			System.out.println(mediaOrderList);
+			
 			for (MediaOrder item : mediaOrderList) {
 
 				Customer customer = bg9PEServices.GetCustomerById(item.getCodigoCliente());
@@ -221,20 +224,23 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 	}
 
 	/**
-	 * Insere as OCs no Portal de Vendas
+	 * Insere as OCs (Producao) no Portal de Vendas
 	 */
 	public static void InsertFixedBudgets() {
 
 		try {
 
 			ArrayList<FixedBudget> budgetList = bg9PEServices.GetFixedBudgetList();
+			
+//			System.out.println("OC - PRODUCAO");
+//			System.out.println(budgetList);
 
 			for (FixedBudget item : budgetList) {
 
 				Customer customer = new Customer();
 
 				customer = bg9PEServices.GetCustomerById(item.getCodigoCliente());
-
+				
 				String customerId = "";
 
 				if (!customer.getSituacao().isEmpty()) {

@@ -66,7 +66,7 @@ public class Utils {
 	/**
 	 * Pega data de ontem
 	 * 
-	 * @return Retorna a String com data de ontem em formato YYYYMMDD
+	 * @return Retorna a String com data de ontem em formato YYMMDD
 	 */
 	public static String GetYesterdayDateYYMMDD() {
 
@@ -99,7 +99,7 @@ public class Utils {
 	 * @return Converte Microsoft JSON Date para o formato dd/MM/yyyy
 	 */
 	public static String ConvertMSJSONDateToDate(String msDate) {
-
+		
 		String date = "";
 
 		try {

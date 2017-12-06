@@ -39,7 +39,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 	private static final String getProviderService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedores";
 	private static final String publiCookie = new PubliAmplaServiceHelper().Login();
 
-	private static final boolean producao = false;
+	private static final boolean producao = true;
 	private static final int LIMIT = 50;
 
 	public PubliAmplaServiceHelper() {
@@ -315,11 +315,11 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
+			e.printStackTrace();
 			System.out.println(e.getMessage());
 
 		} catch (IOException e) {
-
+			e.printStackTrace();
 			System.out.println(e.getMessage());
 
 		}
@@ -363,7 +363,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 	}
 
 	@Override
-	public String GetProviderNF(int ppCod) {
+	public ProductionOrder GetProviderNF(int ppCod) {
 
 		ArrayList<ProductionOrder> list = new ArrayList<ProductionOrder>();
 
@@ -421,7 +421,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 		}
 
 		if (list != null && !list.isEmpty()) {
-			return list.get(0).getNotaFiscalFornecedor();
+			return list.get(0);
 		} else {
 			return null;
 		}

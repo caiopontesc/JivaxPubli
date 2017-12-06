@@ -396,7 +396,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 	}
 
 	@Override
-	public String GetProviderNF(int ppCod) {
+	public ProductionOrder GetProviderNF(int ppCod) {
 
 		ArrayList<ProductionOrder> list = new ArrayList<ProductionOrder>();
 
@@ -451,7 +451,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 		}
 
 		if (list != null && !list.isEmpty()) {
-			return list.get(0).getNotaFiscalFornecedor();
+			return list.get(0);
 		} else {
 			return null;
 		}

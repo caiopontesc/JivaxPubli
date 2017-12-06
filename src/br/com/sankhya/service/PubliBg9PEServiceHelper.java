@@ -125,7 +125,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 				conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
 				String input = gson.toJson(request);
-
+				
 				OutputStream os = conn.getOutputStream();
 				os.write(input.getBytes());
 				os.flush();
@@ -352,7 +352,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 	}
 
 	@Override
-	public String GetProviderNF(int ppCod) {
+	public ProductionOrder GetProviderNF(int ppCod) {
 
 		ArrayList<ProductionOrder> list = new ArrayList<ProductionOrder>();
 
@@ -409,7 +409,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 		}
 
 		if (list != null && !list.isEmpty()) {
-			return list.get(0).getNotaFiscalFornecedor();
+			return list.get(0);
 		} else {
 			return null;
 		}

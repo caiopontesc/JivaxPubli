@@ -1446,4 +1446,13 @@ public class MediaOrder {
 		TextosLivres = textosLivres;
 	}
 
+	@Override
+	public String toString() {
+		return "MediaOrder [DataAlteracao=" + DataAlteracao + ", DataManutencao=" + DataManutencao + ", Id=" + Id
+				+ ", CodigoFornecedor=" + CodigoFornecedor + ", Numero=" + Numero + ", Orcamento=" + Orcamento
+				+ ", Valor=" + Valor + ", Descricao=" + Descricao + "]";
+	}
+	
+	
+
 }

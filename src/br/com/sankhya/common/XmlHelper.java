@@ -674,7 +674,7 @@ public class XmlHelper {
 			numNfEmi.setText(Utils.ConvertMSJSONDateToDate(order.getNfEmissao()));
 
 			Element venc = new Element("AD_DTVENCIMENTO");
-			venc.setText(Utils.ConvertMSJSONDateToDate(order.getVencimento()));
+			venc.setText(Utils.ConvertMSJSONDateToDate(order.getParcelas().get(0).getVencimento()));
 
 			// item2
 			Element item2 = new Element("item");
@@ -914,7 +914,7 @@ public class XmlHelper {
 	}
 
 	/**
-	 * Monta XML para inserir uma OC
+	 * Monta XML para inserir uma OC (Producao)
 	 * 
 	 * @param budget
 	 * @param customerId
@@ -930,7 +930,7 @@ public class XmlHelper {
 		Document doc = new Document(request);
 
 		String codCenCus = JivaServiceHelper.GetCustomerCostCenterById(customerId);
-		String nf = "";
+		ProductionOrder nf = new ProductionOrder();
 
 		try {
 
@@ -1142,31 +1142,30 @@ public class XmlHelper {
 						}
 
 						Element notaF = new Element("AD_NOTA");
-						notaF.setText(Utils.removeInvalidXMLCharacters(Utils.RemoveSpecialCharacters(nf))
+						notaF.setText(Utils.removeInvalidXMLCharacters(Utils.RemoveSpecialCharacters(nf != null ? nf.getNotaFiscalFornecedor() : null))
 								.replaceAll("[^\\d.]", ""));
-
+						
+						// se nao existir o fornecedor cadastrado, cadastra-o
+						String providerId = insertProviderIfNotExists(provider, cookie);
+						
 						Element codFor = new Element("AD_CODFORN");
-						codFor.setText(JivaServiceHelper.GetCustomerIdByCNPJ(
-								br.com.sankhya.common.Utils.RemoveSpecialCharacters(provider.getCnpj()), cookie,
-								Integer.toString(provider.getCodigo())));
+						codFor.setText(providerId);
 
 						Element descFor = new Element("AD_FORNECEDOR");
-						descFor.setText(JivaServiceHelper.GetCustomerNameById(JivaServiceHelper.GetCustomerIdByCNPJ(
-								br.com.sankhya.common.Utils.RemoveSpecialCharacters(provider.getCnpj()), cookie,
-								Integer.toString(provider.getCodigo())), cookie));
+						descFor.setText(JivaServiceHelper.GetCustomerNameById(providerId, cookie));
 
 						Element tipo2 = new Element("TIPO");
 						tipo2.setText(budget.getSubTipo());
 
 						Element descr2 = new Element("OBSERVACAO");
 						descr2.setText("CAMPANHA: " + budget.getCampanha() + "\nNOME DO FORNECEDOR: "
-								+ obj.getNomeFornecedor() + "\nNOTA FISCAL DO FORNECEDOR: " + nf + "\nCNPJ: "
+								+ obj.getNomeFornecedor() + "\nNOTA FISCAL DO FORNECEDOR: " + (nf != null ? nf.getNotaFiscalFornecedor() : "") + "\nCNPJ: "
 								+ provider.getCnpj() + "\nDESCRICAO: " + obj.getDescricao().replace("<br>", " ")
 								+ "\nPP: " + obj.getPedido());
 
 						Element dtVenc = new Element("AD_DTVENCIMENTO");
 						dtVenc.setText(Utils
-								.removeInvalidXMLCharacters(Utils.ConvertMSJSONDateToDate(budget.getVencimento())));
+								.removeInvalidXMLCharacters(Utils.ConvertMSJSONDateToDate(nf != null ? nf.getVencimento() : "")));
 
 						item2.addContent(dtVenc);
 						item2.addContent(descr2);
@@ -1322,26 +1321,24 @@ public class XmlHelper {
 						}
 
 						Element notaF = new Element("AD_NOTA");
-						notaF.setText(Utils.removeInvalidXMLCharacters(Utils.RemoveSpecialCharacters(nf))
+						notaF.setText(Utils.removeInvalidXMLCharacters(Utils.RemoveSpecialCharacters(nf.getNotaFiscalFornecedor()))
 								.replaceAll("[^\\d.]", ""));
 
+						// se nao existir o fornecedor cadastrado, cadastra-o
+						String providerId = insertProviderIfNotExists(provider, cookie);
+
 						Element codFor = new Element("AD_CODFORN");
-						codFor.setText(
-								JivaServiceHelper.GetCustomerIdByCNPJ(Utils.RemoveSpecialCharacters(provider.getCnpj()),
-										cookie, Integer.toString(provider.getCodigo())));
+						codFor.setText(providerId);
 
 						Element descFor = new Element("AD_FORNECEDOR");
-						descFor.setText(JivaServiceHelper.GetCustomerNameById(
-								JivaServiceHelper.GetCustomerIdByCNPJ(Utils.RemoveSpecialCharacters(provider.getCnpj()),
-										cookie, Integer.toString(provider.getCodigo())),
-								cookie));
+						descFor.setText(JivaServiceHelper.GetCustomerNameById(providerId, cookie));
 
 						Element tipo2 = new Element("TIPO");
 						tipo2.setText(budget.getSubTipo());
 
 						Element descr2 = new Element("OBSERVACAO");
 						descr2.setText("CAMPANHA: " + budget.getCampanha() + "\nNOME DO FORNECEDOR: "
-								+ obj.getNomeFornecedor() + "\nNOTA FISCAL DO FORNECEDOR: " + nf + "\nCNPJ: "
+								+ obj.getNomeFornecedor() + "\nNOTA FISCAL DO FORNECEDOR: " + nf.getNotaFiscalFornecedor() + "\nCNPJ: "
 								+ provider.getCnpj() + "\nDESCRICAO: " + obj.getDescricao().replace("<br>", " ")
 								+ "\nPP: " + obj.getPedido());
 
@@ -1404,7 +1401,7 @@ public class XmlHelper {
 			return doc;
 
 		} catch (Exception e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			System.out.println(e.getMessage());
 			return doc;
 		}
@@ -1859,7 +1856,7 @@ public class XmlHelper {
 		Element localFields = new Element("localFields");
 
 		Element nome = new Element("NOMEPARC");
-		nome.setText(obj.getNome());
+		nome.setText(obj.getNome().trim());
 		Element cliente = new Element("CLIENTE");
 		cliente.setText("S");
 		Element fornecedor = new Element("FORNECEDOR");
@@ -1966,7 +1963,7 @@ public class XmlHelper {
 		Element localFields = new Element("localFields");
 
 		Element nome = new Element("NOMEPARC");
-		nome.setText(obj.getNome());
+		nome.setText(obj.getNome().trim());
 		Element cliente = new Element("CLIENTE");
 		cliente.setText("S");
 		Element fornecedor = new Element("FORNECEDOR");
@@ -2080,7 +2077,7 @@ public class XmlHelper {
 		Element localFields = new Element("localFields");
 
 		Element nome = new Element("NOMEPARC");
-		nome.setText(obj.getNome());
+		nome.setText(obj.getNome().trim());
 		Element fornecedor = new Element("FORNECEDOR");
 		fornecedor.setText("S");
 		Element tipPessoa = new Element("TIPPESSOA");
@@ -2211,7 +2208,7 @@ public class XmlHelper {
 		Element localFields = new Element("localFields");
 
 		Element nome = new Element("NOMEPARC");
-		nome.setText(obj.getNome());
+		nome.setText(obj.getNome().trim());
 		Element fornecedor = new Element("FORNECEDOR");
 		fornecedor.setText("S");
 		Element tipPessoa = new Element("TIPPESSOA");
@@ -2429,6 +2426,27 @@ public class XmlHelper {
 		DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
 		LSSerializer lsSerializer = domImplementation.createLSSerializer();
 		return lsSerializer.writeToString(doc);
+	}
+	
+	/**
+	 * Caso o provedor (fornecedor) não exista na base Jiva, insere-o.
+	 * 
+	 * @param provider
+	 * @param jivaCookie
+	 * @return
+	 */
+	private static String insertProviderIfNotExists(Provider provider, String jivaCookie) {
+		if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
+				Utils.RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
+				Integer.toString(provider.getCodigo()))) {
+			JivaServiceHelper.InsertProvider(provider, jivaCookie, Integer.toString(provider.getCodigo()));
+		}
+
+		String providerId = JivaServiceHelper.GetCustomerIdByCNPJ(
+				Utils.RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
+				Integer.toString(provider.getCodigo()));
+		
+		return providerId;
 	}
 
 }
