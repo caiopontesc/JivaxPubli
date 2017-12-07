@@ -48,7 +48,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 
 		try {
 			
-			System.out.println("> Autenticando em " + getURLEnviroment(loginService));
+			System.out.println("\n> Autenticando na BG9 PE: " + getURLEnviroment(loginService));
 
 			URL url = new URL(getURLEnviroment(loginService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();

@@ -228,13 +228,11 @@ public class JivaServiceHelper {
 			
 			if (nuNota == null || nuNota.isEmpty()) {
 				String erro = document.getElementsByTagName("statusMessage").item(0).getTextContent();
-				System.out.println("ERRO ao importar a OC " + budget.getNumero() + ": " + Base64Utils.decode(erro));
+				System.out.println("Não foi possível importar a OC " + budget.getNumero() + ": " + Base64Utils.decode(erro));
 			} else {
-				System.out.println("Pedido " + nuNota + " (Nro Unico) importado.");
+				System.out.println("OC " + budget.getNumero() + " importada com sucesso! Nro Unico: " + nuNota + ".");
 			}
 			
-//			System.out.println(XmlHelper.getStringFromDoc(document));
-
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
@@ -489,8 +487,10 @@ public class JivaServiceHelper {
 			org.w3c.dom.Document document = builder.parse(resStream);
 
             if(!wasSuccessful(document)){
-                System.out.println("Não foi possível adicionar o cliente: " + customer.getNome() +  " ao Jiva. Deverá ser adicionado manualmente.");
-//                System.out.println("Motivo: " + Base64Utils.decode(XmlHelper.getStringFromDoc(document)));
+	            	String motivo = document.getElementsByTagName("statusMessage").item(0).getTextContent();
+	            	
+	            	System.out.println("Não foi possível adicionar o cliente: " + customer.getNome() +  " ao Jiva. Deverá ser adicionado manualmente.");
+				System.out.println("Motivo: " + Base64Utils.decode(motivo));
             }
 
 //			 System.out.println(XmlHelper.getStringFromDoc(document));
@@ -515,7 +515,7 @@ public class JivaServiceHelper {
 			XMLOutputter xmlOutput = new XMLOutputter();
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-
+			
 			Address address = GetAddressCodesByCEP(Utils.RemoveSpecialCharacters(provider.getCep()), cookie);
 
 			if (address.getCodCid() == null || address.getCodCid().isEmpty()) {
@@ -544,8 +544,10 @@ public class JivaServiceHelper {
 			org.w3c.dom.Document document = builder.parse(resStream);
 
             if(!wasSuccessful(document)){
-                System.out.println("Não foi possível adicionar o fornecedor: " + provider.getNome() +  " ao Jiva. Deverá ser adicionado manualmente.");
-//                System.out.println("Motivo: " + Base64Utils.decode(XmlHelper.getStringFromDoc(document)));
+            		String motivo = document.getElementsByTagName("statusMessage").item(0).getTextContent();
+
+            		System.out.println("Não foi possível adicionar o fornecedor: " + provider.getNome() +  " ao Jiva. Deverá ser adicionado manualmente.");
+            		System.out.println("Motivo: " + Base64Utils.decode(motivo));
             }
 
 			// System.out.println(XmlHelper.getStringFromDoc(document));
@@ -659,9 +661,9 @@ public class JivaServiceHelper {
 			String nuNota = itemNuNota != null ? itemNuNota.getTextContent() : null;
 			if (nuNota == null || nuNota.isEmpty()) {
 				String erro = document.getElementsByTagName("statusMessage").item(0).getTextContent();
-				System.out.println("ERRO ao importar a MÍDIA " + order.getPlanilhaNumero() + ": " + Base64Utils.decode(erro));
+				System.out.println("Não foi possível importar a MÍDIA " + order.getPlanilhaNumero() + ": " + Base64Utils.decode(erro));
 			} else {
-				System.out.println("Pedido " + nuNota + " (Nro Unico) importado.");
+				System.out.println("MÍDIA " + order.getPlanilhaNumero() + " importada com sucesso. Nro Unico: " + nuNota + ".");
 			}
 
 		} catch (Throwable e) {

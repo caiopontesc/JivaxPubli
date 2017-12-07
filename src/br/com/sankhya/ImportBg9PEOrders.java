@@ -231,12 +231,9 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 		try {
 
 			ArrayList<FixedBudget> budgetList = bg9PEServices.GetFixedBudgetList();
-			
-//			System.out.println("OC - PRODUCAO");
-//			System.out.println(budgetList);
 
 			for (FixedBudget item : budgetList) {
-
+				
 				Customer customer = new Customer();
 
 				customer = bg9PEServices.GetCustomerById(item.getCodigoCliente());

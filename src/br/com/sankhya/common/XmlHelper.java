@@ -23,6 +23,7 @@ import br.com.sankhya.service.PubliBg9ALServiceHelper;
 import br.com.sankhya.service.PubliBg9PEServiceHelper;
 
 public class XmlHelper {
+	private static final int SERVICO_CONSULTADO = 4;
 	private static final String loginService = "MobileLoginSP.login";
 	private static final String insertOrderService = "CACSP.incluirNota";
 	private static final String loadService = "CRUDServiceProvider.loadRecords";
@@ -159,8 +160,7 @@ public class XmlHelper {
 			return doc;
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			// System.out.println(e.getMessage());
+			System.out.println(e.getMessage());
 			return doc;
 		}
 	}
@@ -531,7 +531,6 @@ public class XmlHelper {
 			return doc;
 
 		} catch (Exception e) {
-			// e.printStackTrace();
 			System.out.println(e.getMessage());
 			return doc;
 		}
@@ -907,8 +906,7 @@ public class XmlHelper {
 			return doc;
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			// System.out.println(e.getMessage());
+			System.out.println(e.getMessage());
 			return doc;
 		}
 	}
@@ -1081,8 +1079,8 @@ public class XmlHelper {
 						item2.addContent(nunotaIte2);
 						itens.addContent(item2);
 
-					// Servico Encomendado
-					} else {
+					// Servico Encomendado (com exceção de consultados (tr == 4))
+					} else if (obj.getTr() != SERVICO_CONSULTADO) {
 
 						Provider provider = new Provider();
 
@@ -1165,7 +1163,7 @@ public class XmlHelper {
 
 						Element dtVenc = new Element("AD_DTVENCIMENTO");
 						dtVenc.setText(Utils
-								.removeInvalidXMLCharacters(Utils.ConvertMSJSONDateToDate(nf != null ? nf.getVencimento() : "")));
+								.removeInvalidXMLCharacters(nf != null ? Utils.ConvertMSJSONDateToDate(nf.getVencimento()) : ""));
 
 						item2.addContent(dtVenc);
 						item2.addContent(descr2);
@@ -1248,8 +1246,8 @@ public class XmlHelper {
 						item2.addContent(nunotaIte2);
 						itens.addContent(item2);
 
-					// Servico Encomendado
-					} else if (obj.getGrau() == 2) {
+					// Servico Encomendado (com exceção de consultados (tr == 4))
+					} else if (obj.getGrau() == 2 && obj.getTr() != SERVICO_CONSULTADO) {
 
 						Provider provider = new Provider();
 
@@ -1396,12 +1394,13 @@ public class XmlHelper {
 			body.addContent(nota);
 			doc.getRootElement().addContent(body);
 
-			//System.out.println(new XMLOutputter().outputString(doc));
+			if (budget.getNumero() == 12609) {
+				System.out.println(budget.getSubTipo());
+			}
 
 			return doc;
 
 		} catch (Exception e) {
-			 e.printStackTrace();
 			System.out.println(e.getMessage());
 			return doc;
 		}
@@ -1569,8 +1568,7 @@ public class XmlHelper {
 			return doc;
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			// System.out.println(e.getMessage());
+			System.out.println(e.getMessage());
 			return doc;
 		}
 	}

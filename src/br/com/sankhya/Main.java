@@ -22,7 +22,7 @@ public class Main {
 		try {
 
 			System.out.println("Iniciar processo de importação...\n\n");
-
+			
 			Ampla();
 			ImportBg9PEOrders.Bg9PE();
 			ImportBg9ALOrders.Bg9AL();

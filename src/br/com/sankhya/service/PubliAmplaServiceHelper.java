@@ -53,7 +53,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 
 		try {
 
-			System.out.println("> Autenticando em " + getURLEnviroment(loginService));
+			System.out.println("> Autenticando na AMPLA: " + getURLEnviroment(loginService));
 
 			URL url = new URL(getURLEnviroment(loginService));
 			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();

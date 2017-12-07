@@ -121,6 +121,7 @@ public class Utils {
 			Calendar calendar = Calendar.getInstance();
 
 			calendar.setTimeInMillis(milliSeconds);
+			calendar.add(Calendar.DAY_OF_MONTH, 1);
 
 			date = formatter.format(calendar.getTime());
 
