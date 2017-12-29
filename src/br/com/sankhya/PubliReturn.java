@@ -1,14 +1,18 @@
 package br.com.sankhya;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import com.sun.xml.internal.fastinfoset.Encoder;
 
 import br.com.sankhya.common.Utils;
 import br.com.sankhya.infrastructure.JdbcOracleConnection;
@@ -35,9 +39,10 @@ public class PubliReturn {
 		PreparedStatement pstmt = null;
 
 		String query = "SELECT DISTINCT CASE WHEN ITE.CODPROD IN (661, 662, 671, 674,675) THEN ? "
-				+ "ELSE ? END AS TIPODOC, CAB.NUMNOTA AS DOCUMENTO, CAB.NUMNOTA AS FATURA,CAB.NUNOTA AS NUNOTA, CAB.CODTIPOPER AS TOP, "
-				+ "CAB.DTFATUR AS DTSITUACAO, CAB.AD_PIXOC AS PIXOC FROM TGFCAB CAB INNER JOIN TGFITE ITE ON (ITE.NUNOTA = CAB.NUNOTA) "
-				+ "WHERE (CAB.DTFATUR BETWEEN ? AND ?) AND CAB.TIPMOV = ? AND CAB.AD_PUBLI IS NULL AND CAB.AD_PIXOC IS NOT NULL";
+				+ "ELSE ? END AS TIPODOC, CAB.NUMNOTA AS DOCUMENTO, CAB.NUMNFSE AS FATURA,CAB.NUNOTA AS NUNOTA, CAB.CODTIPOPER AS TOP, "
+				+ "TO_CHAR(CAB.DTFATUR, 'YYYY-MM-DD') AS DTSITUACAO, CAB.AD_PIXOC AS PIXOC FROM TGFCAB CAB INNER JOIN TGFITE ITE ON (ITE.NUNOTA = CAB.NUNOTA) "
+				+ "WHERE (CAB.DTFATUR BETWEEN ? AND ?) AND CAB.TIPMOV = ? AND CAB.AD_PUBLI IS NULL AND CAB.AD_PIXOC IS NOT NULL "
+				+ "AND ROWNUM <= 1";
 
 		try {
 
@@ -59,11 +64,11 @@ public class PubliReturn {
 
 				order.setDocType(rs.getString("TIPODOC"));
 
-				if(order.getDocType().equals("OC")) {
-                    order.setDocNumber(Integer.toString(rs.getInt("DOCUMENTO")));
-                }else{
-                    order.setDocNumber(Integer.toString(rs.getInt("PIXOC")));
-                }
+				if (order.getDocType().equals("OC")) {
+					order.setDocNumber(Integer.toString(rs.getInt("DOCUMENTO")));
+				} else {
+					order.setDocNumber(Integer.toString(rs.getInt("PIXOC")));
+				}
 
 				order.setDtSituation(rs.getString("DTSITUACAO"));
 				order.setCompany("1");
@@ -84,12 +89,10 @@ public class PubliReturn {
 
 			}
 
-			System.out.println("\n\nForam encontrados " + Integer.toString(list.size()) + " registros.");
+			System.out.println("\n\nForam encontrados " + list.size() + " registro(s).");
 
 			for (InvoicedOrder item : list) {
-
 				setInvoicedStateOnPubli(item);
-
 			}
 
 			updateAD_PUBLI(list);
@@ -119,33 +122,32 @@ public class PubliReturn {
 		try {
 
 			String obj = "";
-			System.out.println("\n\nAtualizando o documento de número: " + order.getDocNumber());
-
-			URL url = new URL(getURLEnviroment(service) + "tipoDocumento=" + order.getDocType() + "&documento=" + order.getDocNumber()
-					+ "&situacao=" + order.getFlagSituation() + "&dataSituacao=" + order.getDtSituation()
-					+ "&motivoSituacao=Faturamento" + "&empresa=" + order.getCompany() + "&fatura="
-					+ order.getInvoiceNumber() + "&fatura_empresa=" + order.getInvoiceCompany() + "&tipoFatura=" + " "
-					+ "&hash=" + publiCookie);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			System.out.println("\n");
+			
+			URL url = new URL(getURLEnviroment(service) + "tipoDocumento=" + order.getDocType() + "&documento="
+					+ order.getDocNumber() + "&situacao=" + order.getFlagSituation() + "&dataSituacao="
+					+ order.getDtSituation() + "&motivoSituacao=Faturamento" + "&empresa=" + order.getCompany()
+					+ "&fatura=" + order.getInvoiceNumber() + "&fatura_empresa=" + order.getInvoiceCompany()
+					+ "&" + URLEncoder.encode("tipoFatura= ", "UTF-8") + "&hash=" + publiCookie);
+			
+			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
-
-			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
-
-			System.out.println(obj);
+			
+			if (conn.getResponseCode() >= 400) {
+				obj = Utils.ConvertInputStreamToJsonString(conn.getErrorStream());
+				System.out.println("Erro ao atualizar o processo de número " + order.getDocNumber() + ".\n"
+									+ "Mais detalhes: " + obj);
+			} else {
+//				obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
+				System.out.println("Processo de número " + order.getDocNumber() + " atualizado!");
+			}
 
 			conn.disconnect();
 
-			System.out.println("Processo de número: " + order.getDocNumber() + " atualizado!");
-
-		} catch (MalformedURLException e) {
-
-			System.out.println("\n\n" + e.getMessage());
-
-		} catch (IOException e) {
-
-			System.out.println("\n\n" + e.getMessage());
-
+		} catch (Exception e) {
+			System.out.println("Erro ao atualizar o processo de número " + order.getDocNumber() + " \n"
+							 + "Mais detalhes: " + e.getMessage() + "\n");
 		}
 
 	}

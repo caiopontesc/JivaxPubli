@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class JdbcOracleConnection {
 	private static final String DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
-	private static final String DB_CONNECTION = "jdbc:oracle:thin:@//jiva.grupoduca.com.br:1521/XE";
+	private static final String DB_CONNECTION = "jdbc:oracle:thin:@jiva.grupoduca.com.br:1521:XE";
 	private static final String DB_USER = "jiva";
 	private static final String DB_PASSWORD = "7BNdnvqR";
 
@@ -21,6 +21,7 @@ public class JdbcOracleConnection {
 		} catch (ClassNotFoundException e) {
 
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 
 		}
 
@@ -33,6 +34,7 @@ public class JdbcOracleConnection {
 		} catch (SQLException e) {
 
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 
 		}
 
