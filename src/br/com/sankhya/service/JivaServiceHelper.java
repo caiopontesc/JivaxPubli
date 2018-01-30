@@ -56,7 +56,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=utf-8");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -97,7 +97,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=utf-8");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -142,7 +142,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=ISO-8859-1");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -180,7 +180,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=ISO-8859-1");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -218,7 +218,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=ISO-8859-1");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -266,7 +266,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=utf-8");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -310,7 +310,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=utf-8");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -348,7 +348,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=utf-8");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -391,7 +391,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=utf-8");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -431,7 +431,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=ISO-8859-1");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 //			InputStream resStream = con.getInputStream();
 //			org.w3c.dom.Document document = builder.parse(resStream);
@@ -481,7 +481,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=ISO-8859-1");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -538,7 +538,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=ISO-8859-1");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -583,7 +583,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=ISO-8859-1");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 //			InputStream resStream = con.getInputStream();
 //			org.w3c.dom.Document document = builder.parse(resStream);
@@ -616,7 +616,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=utf-8");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);
@@ -652,7 +652,7 @@ public class JivaServiceHelper {
 			con.setRequestProperty("Content-type", "text/xml; charset=ISO-8859-1");
 
 			OutputStream reqStream = con.getOutputStream();
-			reqStream.write(xmlOutput.outputString(doc).getBytes());
+			reqStream.write(xmlOutput.outputString(doc).getBytes("UTF-8"));
 
 			InputStream resStream = con.getInputStream();
 			org.w3c.dom.Document document = builder.parse(resStream);

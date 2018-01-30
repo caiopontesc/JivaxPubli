@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Utils {
 
@@ -118,10 +119,10 @@ public class Utils {
 
 			}
 
+			TimeZone.setDefault(TimeZone.getTimeZone("America/Brasilia"));
 			Calendar calendar = Calendar.getInstance();
 
 			calendar.setTimeInMillis(milliSeconds);
-			calendar.add(Calendar.DAY_OF_MONTH, 1);
 
 			date = formatter.format(calendar.getTime());
 

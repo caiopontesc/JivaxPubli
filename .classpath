@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/sanws.jar"/>
 	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/skw-cuckoo.jar"/>
 	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/skwextensiontool.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/ojdbc6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

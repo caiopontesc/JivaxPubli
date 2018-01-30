@@ -24,9 +24,9 @@ public class Main {
 			System.out.println("Iniciar processo de importação...\n\n");
 			
 			Ampla();
-			ImportBg9PEOrders.Bg9PE();
-			ImportBg9ALOrders.Bg9AL();
-
+//			ImportBg9PEOrders.Bg9PE();
+//			ImportBg9ALOrders.Bg9AL();
+			
 			System.out.println("\n\n...Processo Finalizado.");
 
 		} catch (Exception e) {

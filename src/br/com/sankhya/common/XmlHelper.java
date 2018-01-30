@@ -1219,6 +1219,7 @@ public class XmlHelper {
 						vlrUnit2.setText(Double.toString(obj.getValorUnitario()));
 
 						//Levava em consideração o valor do desconto
+						
 						/*
 						 * Element vlrDesc2 = new Element("VLRDESC");
 						 * vlrDesc2.setText(Double.toString((obj.

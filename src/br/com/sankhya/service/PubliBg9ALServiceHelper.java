@@ -25,13 +25,13 @@ import br.com.sankhya.domain.StructuredBudget;
 
 public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 
-	private static final String loginService = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/Login?usuario=API2&senha=p4237&empresa=3";
-	private static final String getStructuredBudgetService = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosEstruturados";
-	private static final String getFixedBudgetService = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosFixos";
-	private static final String getMediaOrderService = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosMidia";
-	private static final String getProductionOrderService = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosProducao";
-	private static final String getCustomerServiceById = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetClienteByKey?";
-	private static final String getProviderServiceById = "https://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedorByKey?";
+	private static final String loginService = "http://apibg9.publicloud.com.br/Services/IntegracaoService.svc/Login?usuario=API2&senha=p4237&empresa=3";
+	private static final String getStructuredBudgetService = "http://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosEstruturados";
+	private static final String getFixedBudgetService = "http://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosFixos";
+	private static final String getMediaOrderService = "http://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosMidia";
+	private static final String getProductionOrderService = "http://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosProducao";
+	private static final String getCustomerServiceById = "http://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetClienteByKey?";
+	private static final String getProviderServiceById = "http://apibg9.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedorByKey?";
 	private static final String publiCookie = new PubliBg9ALServiceHelper().Login();
 	
 	private static final boolean producao = true;
@@ -98,13 +98,13 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
+			request.getFilters().add(new Filter("DataManutencao", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
 			// request.getFilters().add(new Filter("#PlanilhaNumero#", "18126",
 			// 9, 1, 0, false));
 			request.setFreeFilter("");
 			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			do {
 
@@ -121,7 +121,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 				String input = gson.toJson(request);
 
 				OutputStream os = conn.getOutputStream();
-				os.write(input.getBytes());
+				os.write(input.getBytes("UTF-8"));
 				os.flush();
 
 				obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -162,13 +162,13 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
+			request.getFilters().add(new Filter("DataManutencao", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
 			// request.getFilters().add(new Filter("#Numero#", "11129", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
 			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			do {
 				
@@ -184,7 +184,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 				String input = gson.toJson(request);
 
 				OutputStream os = conn.getOutputStream();
-				os.write(input.getBytes());
+				os.write(input.getBytes("UTF-8"));
 				os.flush();
 
 				obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -230,7 +230,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			URL url = new URL(getURLEnviroment(getStructuredBudgetService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -242,7 +242,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			String input = gson.toJson(request);
 
 			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
+			os.write(input.getBytes("UTF-8"));
 			os.flush();
 
 			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -279,14 +279,14 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			request.getFilters().add(new Filter("#Orcamento#", Integer.toString(codOC), 9, 1, 0, false));
+			request.getFilters().add(new Filter("Orcamento", Integer.toString(codOC), 9, 1, 0, false));
 			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
 			// false));
 			request.setFreeFilter("");
 			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -300,7 +300,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			String input = gson.toJson(request);
 
 			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
+			os.write(input.getBytes("UTF-8"));
 			os.flush();
 
 			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -333,7 +333,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			String obj = "";
 			Gson gson = new Gson();
 
-			URL url = new URL(getURLEnviroment(getCustomerServiceById + "codigo=" + id + "&hash=" + publiCookie));
+			URL url = new URL(getURLEnviroment(getCustomerServiceById + "codigo=" + id + "&hash=" + getPublicookie()));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -369,7 +369,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			String obj = "";
 			Gson gson = new Gson();
 
-			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&idRegUsu=" + publiCookie));
+			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&hash=" + getPublicookie()));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -409,14 +409,14 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			request.getFields().add("*");
 			// request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0,
 			// false));
-			request.getFilters().add(new Filter("#Numero#", Integer.toString(ppCod), 9, 1, 0, false));
+			request.getFilters().add(new Filter("Numero", Integer.toString(ppCod), 9, 1, 0, false));
 			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
 			// false));
 			request.setFreeFilter("");
 			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -430,7 +430,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			String input = gson.toJson(request);
 
 			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
+			os.write(input.getBytes("UTF-8"));
 			os.flush();
 
 			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -456,6 +456,10 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 			return null;
 		}
 
+	}
+
+	public static String getPublicookie() {
+		return publiCookie;
 	}
 
 }

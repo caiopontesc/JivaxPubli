@@ -11,8 +11,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.net.ssl.HttpsURLConnection;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,15 +26,15 @@ import br.com.sankhya.domain.StructuredBudget;
 
 public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 
-	private static final String loginService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/Login?usuario=API&senha=p4237&empresa=1";
-	private static final String getStructuredBudgetService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosEstruturados";
-	private static final String getFixedBudgetService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosFixos";
-	private static final String getMediaOrderService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosMidia";
-	private static final String getProductionOrderService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosProducao";
-	private static final String getCustomerService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetClientes";
-	private static final String getCustomerServiceById = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetClienteByKey?";
-	private static final String getProviderServiceById = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedorByKey?";
-	private static final String getProviderService = "https://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedores";
+	private static final String loginService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/Login?usuario=API&senha=p4237&empresa=1";
+	private static final String getStructuredBudgetService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosEstruturados";
+	private static final String getFixedBudgetService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosFixos";
+	private static final String getMediaOrderService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosMidia";
+	private static final String getProductionOrderService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosProducao";
+	private static final String getCustomerService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetClientes";
+	private static final String getCustomerServiceById = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetClienteByKey?";
+	private static final String getProviderServiceById = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedorByKey?";
+	private static final String getProviderService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedores";
 	private static final String publiCookie = new PubliAmplaServiceHelper().Login();
 
 	private static final boolean producao = true;
@@ -56,7 +54,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			System.out.println("> Autenticando na AMPLA: " + getURLEnviroment(loginService));
 
 			URL url = new URL(getURLEnviroment(loginService));
-			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
@@ -123,7 +121,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.setFreeFilter("");
 			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			do {
 				
@@ -139,7 +137,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 				String input = gson.toJson(request);
 
 				OutputStream os = conn.getOutputStream();
-				os.write(input.getBytes());
+				os.write(input.getBytes("UTF-8"));
 				os.flush();
 
 				obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -184,13 +182,13 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
+			request.getFilters().add(new Filter("DataManutencao", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
 			// request.getFilters().add(new Filter("#Numero#", "40407", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
 			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			do {
 				
@@ -206,7 +204,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 				String input = gson.toJson(request);
 				
 				OutputStream os = conn.getOutputStream();
-				os.write(input.getBytes());
+				os.write(input.getBytes("UTF-8"));
 				os.flush();
 
 				obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -246,14 +244,14 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			request.getFilters().add(new Filter("#Orcamento#", Integer.toString(codOC), 9, 1, 0, false));
+			request.getFilters().add(new Filter("Orcamento", Integer.toString(codOC), 9, 1, 0, false));
 			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
 			// false));
 			request.setFreeFilter("");
 			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -264,9 +262,10 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
 			String input = gson.toJson(request);
+			System.out.println(input);
 
 			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
+			os.write(input.getBytes("UTF-8"));
 			os.flush();
 
 			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -303,7 +302,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 
 		try {
 
-			URL url = new URL(getURLEnviroment(getCustomerServiceById + "codigo=" + id + "&hash=" + publiCookie));
+			URL url = new URL(getURLEnviroment(getCustomerServiceById + "codigo=" + id + "&hash=" + getPublicookie()));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -338,7 +337,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			String obj = "";
 			Gson gson = new Gson();
 
-			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&idRegUsu=" + publiCookie));
+			URL url = new URL(getURLEnviroment(getProviderServiceById + "codigo=" + id + "&hash=" + getPublicookie()));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
@@ -376,14 +375,14 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.getFields().add("*");
 			// request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0,
 			// false));
-			request.getFilters().add(new Filter("#Numero#", Integer.toString(ppCod), 9, 1, 0, false));
+			request.getFilters().add(new Filter("Numero", Integer.toString(ppCod), 9, 1, 0, false));
 			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
 			// false));
 			request.setFreeFilter("");
 			request.setLimit("50");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			URL url = new URL(getURLEnviroment(getProductionOrderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -396,7 +395,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			String input = gson.toJson(request);
 
 			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
+			os.write(input.getBytes("UTF-8"));
 			os.flush();
 
 			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -451,7 +450,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			URL url = new URL(getURLEnviroment(getCustomerService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -463,7 +462,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			String input = gson.toJson(request);
 
 			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
+			os.write(input.getBytes("UTF-8"));
 			os.flush();
 
 			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -514,7 +513,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			URL url = new URL(getURLEnviroment(getProviderService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -526,7 +525,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			String input = gson.toJson(request);
 
 			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
+			os.write(input.getBytes("UTF-8"));
 			os.flush();
 
 			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -572,7 +571,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.setLimit("15");
 			request.setOffSet(0);
 			request.setOptions("");
-			request.setIdRegUsu(publiCookie);
+			request.setIdRegUsu(getPublicookie());
 
 			URL url = new URL(getURLEnviroment(getStructuredBudgetService));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -584,7 +583,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			String input = gson.toJson(request);
 
 			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
+			os.write(input.getBytes("UTF-8"));
 			os.flush();
 
 			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
@@ -609,6 +608,10 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 
 		return list;
 
+	}
+
+	public static String getPublicookie() {
+		return publiCookie;
 	}
 
 }

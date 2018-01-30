@@ -8,11 +8,11 @@ public class Base64Utils {
 	}
 
 	public static String encode(String value) throws Exception {
-		return DatatypeConverter.printBase64Binary(value.getBytes()); // use "utf-8" if java 6
+		return DatatypeConverter.printBase64Binary(value.getBytes("UTF8")); // use "utf-8" if java 6
 	}
 
 	public static String decode(String value) throws Exception {
 		byte[] decodedValue = DatatypeConverter.parseBase64Binary(value);
-		return new String(decodedValue); // use "utf-8" if java 6
+		return new String(decodedValue, "UTF-8"); // use "utf-8" if java 6
 	}
 }

@@ -11,6 +11,7 @@ public class InvoicedOrder {
 	private String invoiceType;
 	private String TOP;
 	private String NUNOTA;
+	private String empresa;
 
 	public String getDocType() {
 		return docType;
@@ -45,7 +46,13 @@ public class InvoicedOrder {
 	}
 
 	public String getCompany() {
-		return company;
+		String result = "1";
+		
+		if ("BG9 AL".equals(empresa)) {
+			result = "3";
+		}
+
+		return result;
 	}
 
 	public void setCompany(String company) {
@@ -61,7 +68,13 @@ public class InvoicedOrder {
 	}
 
 	public String getInvoiceCompany() {
-		return invoiceCompany;
+		String result = "1";
+		
+		if ("BG9 AL".equals(empresa)) {
+			result = "3";
+		}
+
+		return result;
 	}
 
 	public void setInvoiceCompany(String invoiceCompany) {
@@ -90,6 +103,22 @@ public class InvoicedOrder {
 
 	public void setNUNOTA(String nUNOTA) {
 		NUNOTA = nUNOTA;
+	}
+
+	@Override
+	public String toString() {
+		return "InvoicedOrder [docType=" + docType + ", docNumber=" + docNumber + ", dtSituation=" + dtSituation
+				+ ", flagSituation=" + flagSituation + ", company=" + company + ", invoiceNumber=" + invoiceNumber
+				+ ", invoiceCompany=" + invoiceCompany + ", invoiceType=" + invoiceType + ", TOP=" + TOP + ", NUNOTA="
+				+ NUNOTA + "]";
+	}
+
+	public String getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(String empresa) {
+		this.empresa = empresa;
 	}
 
 }
