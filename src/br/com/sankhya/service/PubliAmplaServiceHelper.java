@@ -182,7 +182,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			request.getFilters().add(new Filter("DataManutencao", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
+			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
 			// request.getFilters().add(new Filter("#Numero#", "40407", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
@@ -262,15 +262,12 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
 			String input = gson.toJson(request);
-			System.out.println(input);
 
 			OutputStream os = conn.getOutputStream();
 			os.write(input.getBytes("UTF-8"));
 			os.flush();
 
 			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
-
-			// System.out.println(obj);
 
 			Type listType = new TypeToken<ArrayList<ProductionOrder>>() {
 			}.getType();
@@ -280,13 +277,15 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
+			e.printStackTrace();
 			System.out.println(e.getMessage());
 
 		} catch (IOException e) {
-
+			e.printStackTrace();
 			System.out.println(e.getMessage());
 
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return list;
@@ -314,11 +313,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
 			System.out.println(e.getMessage());
 
 		} catch (IOException e) {
-			e.printStackTrace();
 			System.out.println(e.getMessage());
 
 		}
@@ -375,7 +372,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.getFields().add("*");
 			// request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0,
 			// false));
-			request.getFilters().add(new Filter("Numero", Integer.toString(ppCod), 9, 1, 0, false));
+			request.getFilters().add(new Filter("#Numero#", Integer.toString(ppCod), 9, 1, 0, false));
 			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
 			// false));
 			request.setFreeFilter("");
@@ -416,7 +413,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 		} catch (IOException e) {
 
 			System.out.println(e.getMessage());
-
+			
 		}
 
 		if (list != null && !list.isEmpty()) {

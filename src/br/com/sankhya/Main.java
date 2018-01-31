@@ -20,12 +20,13 @@ public class Main {
 	public static void main(String[] args) {
 
 		try {
-
 			System.out.println("Iniciar processo de importação...\n\n");
 			
+//			System.out.println(Utils.ConvertMSJSONDateToDate("/Date(1513908000000-0200)/"));
+			
 			Ampla();
-//			ImportBg9PEOrders.Bg9PE();
-//			ImportBg9ALOrders.Bg9AL();
+			ImportBg9PEOrders.Bg9PE();
+			ImportBg9ALOrders.Bg9AL();
 			
 			System.out.println("\n\n...Processo Finalizado.");
 

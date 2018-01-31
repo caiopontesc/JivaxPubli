@@ -103,7 +103,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			request.getFilters().add(new Filter("DataManutencao", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
+			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
 			// request.getFilters().add(new Filter("#PlanilhaNumero#", "16999",
 			// 9, 1, 0, false));
 			// request.getFilters().add(new Filter("#Numero#", "60084", 9, 1, 0,
@@ -171,7 +171,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			request.getFilters().add(new Filter("DataManutencao", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
+			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
 			// request.getFilters().add(new Filter("#Numero#", "11194", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
@@ -255,7 +255,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
 			String input = gson.toJson(request);
-
+System.out.println(input);
 			OutputStream os = conn.getOutputStream();
 			os.write(input.getBytes("UTF-8"));
 			os.flush();

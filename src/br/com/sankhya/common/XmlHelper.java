@@ -9,6 +9,8 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 
+import com.sankhya.util.XMLUtils;
+
 import br.com.sankhya.domain.Address;
 import br.com.sankhya.domain.Customer;
 import br.com.sankhya.domain.FixedBudget;
@@ -1320,7 +1322,9 @@ public class XmlHelper {
 						}
 
 						Element notaF = new Element("AD_NOTA");
-						notaF.setText(Utils.removeInvalidXMLCharacters(Utils.RemoveSpecialCharacters(nf.getNotaFiscalFornecedor()))
+						notaF.setText(Utils
+								.removeInvalidXMLCharacters(
+										Utils.RemoveSpecialCharacters(nf != null ? nf.getNotaFiscalFornecedor() : ""))
 								.replaceAll("[^\\d.]", ""));
 
 						// se nao existir o fornecedor cadastrado, cadastra-o
@@ -1337,9 +1341,10 @@ public class XmlHelper {
 
 						Element descr2 = new Element("OBSERVACAO");
 						descr2.setText("CAMPANHA: " + budget.getCampanha() + "\nNOME DO FORNECEDOR: "
-								+ obj.getNomeFornecedor() + "\nNOTA FISCAL DO FORNECEDOR: " + nf.getNotaFiscalFornecedor() + "\nCNPJ: "
-								+ provider.getCnpj() + "\nDESCRICAO: " + obj.getDescricao().replace("<br>", " ")
-								+ "\nPP: " + obj.getPedido());
+								+ obj.getNomeFornecedor() + "\nNOTA FISCAL DO FORNECEDOR: "
+								+ (nf != null ? nf.getNotaFiscalFornecedor() : "") + "\nCNPJ: " + provider.getCnpj()
+								+ "\nDESCRICAO: " + obj.getDescricao().replace("<br>", " ") + "\nPP: "
+								+ obj.getPedido());
 
 						item2.addContent(descr2);
 						item2.addContent(tipo2);
@@ -1402,7 +1407,7 @@ public class XmlHelper {
 			return doc;
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return doc;
 		}
 
