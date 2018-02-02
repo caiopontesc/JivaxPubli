@@ -108,6 +108,7 @@ public class Utils {
 			long milliSeconds = 0;
 
 			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			DateFormat formatterWithHour = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 			if (msDate != null && !msDate.isEmpty()) {
 
@@ -119,12 +120,17 @@ public class Utils {
 
 			}
 
-			TimeZone.setDefault(TimeZone.getTimeZone("America/Brasilia"));
+			String withHour = formatterWithHour.format(new Date(milliSeconds));
+
+			if (!withHour.contains("00:00:00")) {
+				TimeZone.setDefault(TimeZone.getTimeZone("America/Brasilia"));
+			}
+			
 			Calendar calendar = Calendar.getInstance();
 
 			calendar.setTimeInMillis(milliSeconds);
 
-			date = formatter.format(calendar.getTime());
+			date = formatterWithHour.format(calendar.getTime());
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.sankhya.common.Utils;
 import br.com.sankhya.infrastructure.JdbcOracleConnection;
@@ -40,15 +41,13 @@ public class PubliReturn {
 		PreparedStatement pstmt = null;
 
 		String query = "SELECT DISTINCT CASE WHEN ITE.CODPROD IN (661, 662, 671, 674,675) THEN ? "
-				+ "ELSE ? END AS TIPODOC, CAB_PED.NUMNOTA AS DOCUMENTO, CAB.NUMNFSE AS FATURA,CAB.NUNOTA AS NUNOTA, CAB.CODTIPOPER AS TOP, "
+				+ "ELSE ? END AS TIPODOC, CAB.NUMNOTA AS DOCUMENTO, CAB.NUMNFSE AS FATURA,CAB.NUNOTA AS NUNOTA, CAB.CODTIPOPER AS TOP, "
 				+ "TO_CHAR(CAB.DTFATUR, 'YYYY-MM-DD') AS DTSITUACAO, CAB.AD_PIXOC AS PIXOC, "
 				+ "CASE WHEN CAB.CODEMP IN (2,3,6) THEN 'Ampla' WHEN CAB.CODEMP = 4 THEN 'BG9 PE' WHEN CAB.CODEMP = 5 THEN 'BG9 AL' ELSE '' END EMPRESA, "
 				+ "CASE WHEN EXISTS (SELECT 1 FROM TGFCAN CAN, TGFCAB_EXC EXC WHERE CAN.NUNOTA = EXC.NUNOTA AND EXC.TIPMOV IN ('V') AND CAN.NUNOTA = CAB.NUNOTA) THEN 'CANCELADA' ELSE 'FATURADA' END STATUS "
 				+ "FROM TGFCAB CAB "
 				+ "INNER JOIN TGFITE ITE ON (ITE.NUNOTA = CAB.NUNOTA) "
-				+ "INNER JOIN TGFVAR VAR ON VAR.NUNOTA = CAB.NUNOTA "
-				+ "INNER JOIN TGFCAB CAB_PED ON CAB_PED.NUNOTA = VAR.NUNOTAORIG "
-				+ "WHERE CAB.TIPMOV = ? AND CAB.nunota=39967";
+				+ "WHERE (CAB.DTFATUR BETWEEN ? AND ?) AND CAB.TIPMOV = ? AND CAB.AD_PUBLI IS NULL AND CAB.AD_PIXOC IS NOT NULL";
 		
 //		String query = "SELECT DISTINCT CASE WHEN ITE.CODPROD IN (661, 662, 671, 674,675) THEN ? "
 //				+ "ELSE ? END AS TIPODOC, CAB.NUMNOTA AS DOCUMENTO, CAB.NUMNFSE AS FATURA,CAB.NUNOTA AS NUNOTA, CAB.CODTIPOPER AS TOP, "
@@ -63,9 +62,9 @@ public class PubliReturn {
 
 			pstmt.setString(1, "PI");
 			pstmt.setString(2, "OC");
-//			pstmt.setDate(3, new java.sql.Date(Utils.GetInvoicedOrderIntervalDateDDMMYYYY().getTime()));
-//			pstmt.setDate(4, new java.sql.Date(Utils.GetDateTimeNowDDMMYYY().getTime()));
-			pstmt.setString(3, "V");
+			pstmt.setDate(3, new java.sql.Date(Utils.GetInvoicedOrderIntervalDateDDMMYYYY().getTime()));
+			pstmt.setDate(4, new java.sql.Date(Utils.GetDateTimeNowDDMMYYY().getTime()));
+			pstmt.setString(5, "V");
 
 			ResultSet rs = pstmt.executeQuery();
 
@@ -108,8 +107,16 @@ public class PubliReturn {
 			System.out.println("\n\nForam encontrados " + list.size() + " registro(s).");
 
 			for (InvoicedOrder item : list) {
-				System.out.println(item);
-				setInvoicedStateOnPubli(item);
+				List<InvoicedOrder> documentosRelacionados = getDocumentosRelacionados(item.getNUNOTA());
+				
+				// atualiza status dos documentos relacionados
+				for (InvoicedOrder docRelacionado : documentosRelacionados) {
+					item.setEmpresa(docRelacionado.getEmpresa());
+					item.setDocType(docRelacionado.getDocType());
+					item.setDocNumber(docRelacionado.getNUNOTA());
+					
+					setInvoicedStateOnPubli(item);
+				}
 			}
 
 			updateAD_PUBLI(list);
@@ -134,6 +141,61 @@ public class PubliReturn {
 
 	}
 
+	private static List<InvoicedOrder> getDocumentosRelacionados(String nunota) throws SQLException {
+		List<InvoicedOrder> documentosRelacionados = new ArrayList<>();
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+
+			conn = JdbcOracleConnection.getDBConnection();
+
+			String query = "SELECT DISTINCT " + 
+				  " CASE WHEN CAB.AD_PIXOC IS NOT NULL THEN CAB.AD_PIXOC ELSE CAB.NUMNOTA END NUMNOTA," + 
+	              " CASE WHEN ITE.CODPROD IN (661, 662, 671, 674, 675) THEN 'PI' ELSE 'OC' END AS TIPODOC," + 
+	              " CASE WHEN CAB.CODEMP IN (2,3,6) THEN 'Ampla' WHEN CAB.CODEMP = 4 THEN 'BG9 PE' WHEN CAB.CODEMP = 5 THEN 'BG9 AL' ELSE '' END EMPRESA" + 
+	              " FROM TGFVAR VAR" + 
+	              " JOIN TGFITE ITE ON ITE.SEQUENCIA = VAR.SEQUENCIAORIG AND ITE.NUNOTA = VAR.NUNOTAORIG" + 
+	              " JOIN TGFCAB CAB ON CAB.NUNOTA = ITE.NUNOTA" + 
+	              " WHERE VAR.NUNOTA = ? ";
+			
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, Integer.valueOf(nunota));
+			
+			ResultSet rs = pstmt.executeQuery();
+
+			InvoicedOrder docRelacionado;
+			while (rs.next()) {
+				docRelacionado = new InvoicedOrder();
+				docRelacionado.setNUNOTA(String.valueOf(rs.getInt("NUMNOTA")));
+				docRelacionado.setDocType(rs.getString("TIPODOC"));
+				docRelacionado.setEmpresa(rs.getString("EMPRESA"));
+				
+				documentosRelacionados.add(docRelacionado);
+			}
+			
+			return documentosRelacionados;
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			System.out.println("\n\n" + e.getMessage());
+			
+		} finally {
+			
+			if (pstmt != null) {
+				pstmt.close();
+			}
+
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		
+		return documentosRelacionados;
+	}
+
 	public static void setInvoicedStateOnPubli(InvoicedOrder order) {
 
 		try {
@@ -147,7 +209,7 @@ public class PubliReturn {
 					+ order.getDocNumber() + "&situacao=" + order.getFlagSituation() + "&dataSituacao="
 					+ order.getDtSituation() + "&motivoSituacao=Faturamento" + "&empresa=" + order.getCompany()
 					+ "&fatura=" + order.getInvoiceNumber() + "&fatura_empresa=" + order.getInvoiceCompany()
-					+ "&" + URLEncoder.encode("tipoFatura= ", "UTF-8") + "&hash=" + publiCookie);
+					+ "&tipoFatura=4&hash=" + publiCookie);
 			
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -164,8 +226,8 @@ public class PubliReturn {
 			conn.disconnect();
 
 		} catch (Exception e) {
-			System.out.println("Erro ao atualizar o processo de número " + order.getDocNumber() + " \n"
-							 + "Mais detalhes: " + e.getMessage() + "\n");
+			System.out.println("Erro ao atualizar o processo de número " + order.getDocNumber() + " ("
+					+ order.getDocType() + ") \n" + "Mais detalhes: " + e.getMessage() + "\n");
 		}
 
 	}
