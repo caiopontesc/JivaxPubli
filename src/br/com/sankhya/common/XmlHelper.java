@@ -17,6 +17,7 @@ import br.com.sankhya.domain.FixedBudget;
 import br.com.sankhya.domain.FixedCost;
 import br.com.sankhya.domain.Item;
 import br.com.sankhya.domain.MediaOrder;
+import br.com.sankhya.domain.MediaOrderInstallment;
 import br.com.sankhya.domain.ProductionOrder;
 import br.com.sankhya.domain.Provider;
 import br.com.sankhya.service.JivaServiceHelper;
@@ -171,9 +172,10 @@ public class XmlHelper {
 	 * Monta XML para verificar se um Pedido existe através do NUMNOTA
 	 * 
 	 * @param numNota
+	 * @param complemento 
 	 * @return true/false
 	 */
-	public static Document MountXMLToVerifyIfOrderExists(String numNota, String tipMov, int codEmp) {
+	public static Document MountXMLToVerifyIfOrderExists(String numNota, String tipMov, int codEmp, String complemento) {
 		// RootElement
 		Element request = new Element("serviceRequest");
 		request.setAttribute(new Attribute("serviceName", loadService));
@@ -202,8 +204,11 @@ public class XmlHelper {
 
 		// expression
 		Element expression = new Element("expression");
-		expression.setText("this.NUMNOTA = " + numNota + " AND this.TIPMOV = '" + tipMov + "' AND this.CODEMP = "
-				+ Integer.toString(codEmp));
+		expression.setText( "this.NUMNOTA = " + numNota + 
+				            " AND this.TIPMOV = '" + tipMov + 
+				            "' AND this.CODEMP = " + Integer.toString(codEmp) + 
+				            " AND (this.SERIENOTA = '" + complemento + "' OR this.SERIENOTA IS NULL )"); 
+		//System.out.println("Expressao: "+expression.getText());
 
 		criteria.addContent(expression);
 		entity.addContent(fieldSet);
@@ -275,10 +280,11 @@ public class XmlHelper {
 	 * @param order
 	 * @param customerId
 	 * @param providerId
+	 * @param parcela 
 	 * @return
 	 */
 	public static Document MountXMLToInsertPublicationAuth(MediaOrder order, String customerId, String providerId,
-			String providerCNPJ, String cookie) {
+			String providerCNPJ, String cookie, MediaOrderInstallment parcela) {
 
 		// RootElement
 		Element request = new Element("serviceRequest");
@@ -319,6 +325,10 @@ public class XmlHelper {
 			natureza.setText("30101001");
 			Element tipMov = new Element("TIPMOV");
 			tipMov.setText("P");
+			
+			Element serieNota = new Element("SERIENOTA");
+			serieNota.setText(parcela.getComplemento());
+			
 			Element dtNeg = new Element("DTNEG");
 			dtNeg.setText(Utils.ConvertMSJSONDateToDate(order.getDataManutencao()));// Utils.ConvertMSJSONDateToDate(order.getDataInclusao()));
 			Element codTipVen = new Element("CODTIPVENDA");
@@ -377,8 +387,9 @@ public class XmlHelper {
 			qtdNeg.setText("1");
 
 			Element vlrUnit = new Element("VLRUNIT");
-			vlrUnit.setText(String.format("%.2f", order.getParcelas().get(0).getLiquido()).replace(",", "."));
-
+			//vlrUnit.setText(String.format("%.2f", order.getParcelas().get(0).getLiquido()).replace(",", "."));
+            vlrUnit.setText(String.format("%.2f", parcela.getLiquido()).replace(",", "."));
+			
 			Element percDesc = new Element("PERCDESC");
 			percDesc.setText("0.00");
 
@@ -428,7 +439,8 @@ public class XmlHelper {
 			}
 
 			Element dtVenc = new Element("AD_DTVENCIMENTO");
-			dtVenc.setText(Utils.removeInvalidXMLCharacters(Utils.ConvertMSJSONDateToDate(order.getVencimento())));
+//			dtVenc.setText(Utils.removeInvalidXMLCharacters(Utils.ConvertMSJSONDateToDate(order.getVencimento())));
+			dtVenc.setText(Utils.removeInvalidXMLCharacters(Utils.ConvertMSJSONDateToDate(parcela.getVencimento())));
 
 			// item2
 			Element item2 = new Element("item");
@@ -469,7 +481,9 @@ public class XmlHelper {
 			}
 
 			Element vlrUnit2 = new Element("VLRUNIT");
-			double comission = order.getParcelas().get(0).getBrutoCliente() - order.getParcelas().get(0).getLiquido();
+			//double comission = order.getParcelas().get(0).getBrutoCliente() - order.getParcelas().get(0).getLiquido();
+			double comission = parcela.getBrutoCliente() - parcela.getLiquido();
+			
 			vlrUnit2.setText(String.format("%.2f", comission).replace(",", "."));
 
 			Element percDesc2 = new Element("PERCDESC");
@@ -477,8 +491,8 @@ public class XmlHelper {
 			// vlrUnit2.setText(Utils.CalculatesComission(order.getParcelas().get(0).getLiquido(),
 			// order.getPercentualHonorarios()));
 
-			if (order.getParcelas().get(0).getBrutoCliente() - order.getParcelas().get(0).getLiquido() != 0) {
-
+			//if (order.getParcelas().get(0).getBrutoCliente() - order.getParcelas().get(0).getLiquido() != 0) {
+            if (parcela.getBrutoCliente() - parcela.getLiquido() != 0) {
 				item2.addContent(percDesc2);
 				item2.addContent(descr2);
 				item2.addContent(vlrUnit2);
@@ -522,6 +536,7 @@ public class XmlHelper {
 			cabecalho.addContent(codTipVen);
 			cabecalho.addContent(dtNeg);
 			cabecalho.addContent(tipMov);
+			cabecalho.addContent(serieNota);
 
 			nota.addContent(cabecalho);
 			nota.addContent(itens);
@@ -958,8 +973,13 @@ public class XmlHelper {
 
 			Element natureza = new Element("CODNAT");
 			natureza.setText("30101001");
+			
 			Element tipMov = new Element("TIPMOV");
 			tipMov.setText("P");
+			
+//			Element serieNota = new Element("SERIENOTA");   // Lenilton 02 de fevereiro 2018
+//			serieNota.setText(budget.getComplemento());     // Lenilton 02 de fevereiro 2018
+
 			Element dtNeg = new Element("DTNEG");
 			dtNeg.setText(Utils.ConvertMSJSONDateToDate(budget.getDataManutencao()));
 			Element codTipVen = new Element("CODTIPVENDA");
@@ -1394,6 +1414,8 @@ public class XmlHelper {
 			cabecalho.addContent(codTipVen);
 			cabecalho.addContent(dtNeg);
 			cabecalho.addContent(tipMov);
+			
+//			cabecalho.addContent(serieNota);  // Lenilton 02 de fevereiro 2018
 
 			nota.addContent(cabecalho);
 			nota.addContent(itens);
@@ -2446,7 +2468,7 @@ public class XmlHelper {
 			JivaServiceHelper.InsertProvider(provider, jivaCookie, Integer.toString(provider.getCodigo()));
 		}
 
-		String providerId = JivaServiceHelper.GetCustomerIdByCNPJ(
+		String providerId = JivaServiceHelper.GetCustomerIdByCNPJ( //TODO
 				Utils.RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
 				Integer.toString(provider.getCodigo()));
 		

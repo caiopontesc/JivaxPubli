@@ -19,6 +19,7 @@ import br.com.sankhya.domain.Address;
 import br.com.sankhya.domain.Customer;
 import br.com.sankhya.domain.FixedBudget;
 import br.com.sankhya.domain.MediaOrder;
+import br.com.sankhya.domain.MediaOrderInstallment;
 import br.com.sankhya.domain.ProductionOrder;
 import br.com.sankhya.domain.Provider;
 
@@ -75,9 +76,10 @@ public class JivaServiceHelper {
 	 * 
 	 * @param numNota
 	 * @param cookie
+	 * @param parcela 
 	 * @return true/false se o Pedido existe ou não
 	 */
-	public static boolean VerifyIfOrderExistsByNUMNOTA(String numNota, String cookie, String tipMov, int codEmp) {
+	public static boolean VerifyIfOrderExistsByNUMNOTA(String numNota, String cookie, String tipMov, int codEmp, String complemento) {
 
 		boolean exists = false;
 
@@ -87,7 +89,7 @@ public class JivaServiceHelper {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 
-			Document doc = XmlHelper.MountXMLToVerifyIfOrderExists(numNota, tipMov, codEmp);
+			Document doc = XmlHelper.MountXMLToVerifyIfOrderExists(numNota, tipMov, codEmp, complemento );
 
 			URL url = new URL(getURLEnviroment(loadService));
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -633,7 +635,7 @@ public class JivaServiceHelper {
 	}
 
 	public static void InsertPublicationAuth(MediaOrder order, String cookie, String customerId, String providerId,
-			String providerCNPJ) {
+			String providerCNPJ, MediaOrderInstallment parcela) {
 
 		try {
 
@@ -641,8 +643,12 @@ public class JivaServiceHelper {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 
-			Document doc = XmlHelper.MountXMLToInsertPublicationAuth(order, customerId, providerId, providerCNPJ,
-					cookie);
+			Document doc = XmlHelper.MountXMLToInsertPublicationAuth( order, 
+					                                                  customerId, 
+					                                                  providerId, 
+					                                                  providerCNPJ,
+					                                                  cookie,
+					                                                  parcela );
 
 			URL url = new URL(getURLEnviroment(includeOrder) + cookie);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -663,7 +669,7 @@ public class JivaServiceHelper {
 				String erro = document.getElementsByTagName("statusMessage").item(0).getTextContent();
 				System.out.println("Não foi possível importar a MÍDIA " + order.getPlanilhaNumero() + ": " + Base64Utils.decode(erro));
 			} else {
-				System.out.println("MÍDIA " + order.getPlanilhaNumero() + " importada com sucesso. Nro Unico: " + nuNota + ".");
+				System.out.println("MÍDIA " + order.getPlanilhaNumero() + " importada com sucesso. Nro Unico: " + nuNota + " Série '" + parcela.getComplemento() + "'.");
 			}
 
 		} catch (Throwable e) {

@@ -112,12 +112,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
 			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
-			// request.getFilters().add(new Filter("#PlanilhaNumero#", "18342",
-			// 9, 1, 0, false));
-			// request.getFilters().add(new Filter("#Vencimento#", "2015-01-01",
-			// 7, 1, 0, false));
-			// request.getFilters().add(new Filter("DATA_APROV", "2017-01-01",
-			// 7, 1, 0, false));
+//			request.getFilters().add(new Filter("#PlanilhaNumero#", "67695", 9, 1, 0, false));
 			request.setFreeFilter("");
 			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");

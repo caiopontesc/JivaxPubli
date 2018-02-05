@@ -12,6 +12,7 @@ import org.cuckoo.core.ScheduledActionContext;
 import br.com.sankhya.domain.Customer;
 import br.com.sankhya.domain.FixedBudget;
 import br.com.sankhya.domain.MediaOrder;
+import br.com.sankhya.domain.MediaOrderInstallment;
 import br.com.sankhya.domain.ProductionOrder;
 import br.com.sankhya.domain.Provider;
 import br.com.sankhya.extensions.actionbutton.AcaoRotinaJava;
@@ -96,6 +97,7 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 
 				if (!customer.getSituacao().isEmpty()) {
 
+					// Verifica Cliente
 					if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
 							RemoveSpecialCharacters(customer.getCnpj()), jivaCookie,
 							Integer.toString(customer.getCodigo()))) {
@@ -116,6 +118,8 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 
 					}
 
+
+					// Verifica Fornecedor
 					if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
 							RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
 							Integer.toString(provider.getCodigo()))) {
@@ -136,15 +140,29 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 
 					}
 
-					if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString(item.getPlanilhaNumero()),
-							jivaCookie, "P", RelationCompany(item.getEmpresa()))) {
 
-						item.setEmpresa(RelationCompany(item.getEmpresa()));
+					item.setEmpresa(RelationCompany(item.getEmpresa()));
 
-						JivaServiceHelper.InsertPublicationAuth(item, jivaCookie, customerId, providerId,
-								provider.getCnpj());
+                    ArrayList<MediaOrderInstallment> pesqParcelaLista = item.getParcelas();
+                    
+                    for(MediaOrderInstallment parcela: pesqParcelaLista) {
+                    	
+    					if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA( Integer.toString(item.getPlanilhaNumero()),
+    							                                             jivaCookie, 
+    							                                             "P", 
+    							                                             item.getEmpresa(), 
+    							                                             parcela.getComplemento()) ) {
 
-					}
+
+    						JivaServiceHelper.InsertPublicationAuth( item, 
+    								                                 jivaCookie, 
+    								                                 customerId, 
+    								                                 providerId,
+    								                                 provider.getCnpj(), 
+    								                                 parcela );
+
+    					}
+                    }
 
 				}
 
@@ -195,7 +213,7 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 					}
 
 					if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString(item.getNumero()), jivaCookie,
-							"P", RelationCompany(item.getEmpresa()))) {
+							"P", RelationCompany(item.getEmpresa()), null)) {
 
 						item.setEmpresa(RelationCompany(item.getEmpresa()));
 
@@ -273,7 +291,7 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 					}
 
 					if (JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString(item.getNumero()), jivaCookie,
-							"C", RelationCompany(item.getEmpresa())) == false) {
+							"C", RelationCompany(item.getEmpresa()), null) == false) {
 
 						item.setEmpresa(RelationCompany(item.getEmpresa()));
 
@@ -334,7 +352,7 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 					}
 
 					if (JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString(item2.getNumero()), jivaCookie,
-							"C", RelationCompany(item2.getEmpresa())) == false) {
+							"C", RelationCompany(item2.getEmpresa()), null) == false) {
 
 						item2.setEmpresa(RelationCompany(item2.getEmpresa()));
 

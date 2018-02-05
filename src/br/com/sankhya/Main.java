@@ -1,11 +1,13 @@
 package br.com.sankhya;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.sankhya.common.Utils;
 import br.com.sankhya.domain.Customer;
 import br.com.sankhya.domain.FixedBudget;
 import br.com.sankhya.domain.MediaOrder;
+import br.com.sankhya.domain.MediaOrderInstallment;
 import br.com.sankhya.domain.ProductionOrder;
 import br.com.sankhya.domain.Provider;
 import br.com.sankhya.service.JivaServiceHelper;
@@ -67,10 +69,12 @@ public class Main {
 
 				if (customer != null && !customer.getSituacao().isEmpty()) {
 
+					// Verifica a existência do cliente
 					if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
 							Utils.RemoveSpecialCharacters(customer.getCnpj()), jivaCookie,
 							Integer.toString(customer.getCodigo()))) {
 
+						// Insere o cliente
 						JivaServiceHelper.InsertCustomer(customer, jivaCookie, Integer.toString(customer.getCodigo()));
 
 						customerId = JivaServiceHelper.GetCustomerIdByCNPJ(
@@ -87,10 +91,12 @@ public class Main {
 
 					}
 
+					// Pesquisa fornecedor
 					if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
 							Utils.RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
 							Integer.toString(provider.getCodigo()))) {
 
+						// Insere o fornecedor
 						JivaServiceHelper.InsertProvider(provider, jivaCookie, Integer.toString(provider.getCodigo()));
 
 						providerId = JivaServiceHelper.GetCustomerIdByCNPJ(
@@ -107,14 +113,35 @@ public class Main {
 
 					}
 
-					if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString(item.getPlanilhaNumero()),
-							jivaCookie, "P", RelationCompany(item.getEmpresa()))) {
+					
+					// Pesquisa a existência da nota fiscal a partir das parcelas
+					ArrayList<MediaOrderInstallment> pesqParcelaLista = item.getParcelas(); 
+					
+					item.setEmpresa(RelationCompany(item.getEmpresa()));
+					
+					for (MediaOrderInstallment parcela : pesqParcelaLista) {
+						if(ValidaParcela(parcela)) {
 
-						item.setEmpresa(RelationCompany(item.getEmpresa()));
+							if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA( Integer.toString(item.getPlanilhaNumero()),
+									jivaCookie,
+									"P", 
+									item.getEmpresa(),
+									parcela.getComplemento()
+									)) {
 
-						JivaServiceHelper.InsertPublicationAuth(item, jivaCookie, customerId, providerId,
-								provider.getCnpj());
+								//System.out.println(Utils.ConvertMSJSONDateToDate(parcela.getVencimento()));			
+	                            
+								JivaServiceHelper.InsertPublicationAuth( item, 
+										                                 jivaCookie, 
+										                                 customerId, 
+										                                 providerId,
+										                                 provider.getCnpj(),
+										                                 parcela );
 
+							}
+							
+						}
+						
 					}
 
 				}
@@ -125,6 +152,11 @@ public class Main {
 			e.printStackTrace();
 		}
 
+	}
+
+	private static boolean ValidaParcela(MediaOrderInstallment parcela) {
+		// Valida a situação da parcela
+		return "L".equals(parcela.getSituacaoDB());
 	}
 
 	/**
@@ -163,8 +195,11 @@ public class Main {
 
 					}
 
-					if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString(item.getNumero()), jivaCookie,
-							"P", RelationCompany(item.getEmpresa()))) {
+					if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA( Integer.toString(item.getNumero()), 
+							                                             jivaCookie,
+							                                             "P", 
+							                                             RelationCompany(item.getEmpresa()),
+							                                             null)) {
 
 						item.setEmpresa(RelationCompany(item.getEmpresa()));
 
@@ -241,7 +276,7 @@ public class Main {
 					}
 
 					if (JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString(item.getNumero()), jivaCookie,
-							"C", RelationCompany(item.getEmpresa())) == false) {
+							"C", RelationCompany(item.getEmpresa()),null) == false) {
 
 						item.setEmpresa(RelationCompany(item.getEmpresa()));
 
