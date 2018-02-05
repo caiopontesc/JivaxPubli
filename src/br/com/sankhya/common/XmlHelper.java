@@ -1092,10 +1092,12 @@ public class XmlHelper {
 						Element sequencia2 = new Element("SEQUENCIA");
 
 						Element codProd2 = new Element("CODPROD");
+						Element codPedido2 = new Element("AD_CODPEDIDO");
 
 						switch (budget.getSubTipo()) {
 							case executiveProd:
 								codProd2.setText("665");
+								codPedido2.setText(String.valueOf(obj.getPedido()));
 								break;
 							case eletronicProd:
 								codProd2.setText("664");
@@ -1260,10 +1262,12 @@ public class XmlHelper {
 						Element sequencia2 = new Element("SEQUENCIA");
 
 						Element codProd2 = new Element("CODPROD");
+						Element codPedido2 = new Element("AD_CODPEDIDO");
 
 						switch (obj.getSubTipo()) {
 							case executiveProd:
 								codProd2.setText("665");
+								codPedido2.setText(String.valueOf(obj.getPedido()));
 								break;
 							case eletronicProd:
 								codProd2.setText("664");
