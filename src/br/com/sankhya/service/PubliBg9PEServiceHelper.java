@@ -103,9 +103,10 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
-			// request.getFilters().add(new Filter("#PlanilhaNumero#", "16999",
-			// 9, 1, 0, false));
+			
+			//request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
+			request.getFilters().add(new Filter("#PlanilhaNumero#", "21123", 9, 1, 0, false));
+			
 			// request.getFilters().add(new Filter("#Numero#", "60084", 9, 1, 0,
 			// false));
 			request.setFreeFilter("");
@@ -399,13 +400,8 @@ System.out.println(input);
 
 			conn.disconnect();
 
-		} catch (MalformedURLException e) {
-
-			e.printStackTrace();
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO
 		}
 
 		if (list != null && !list.isEmpty()) {
