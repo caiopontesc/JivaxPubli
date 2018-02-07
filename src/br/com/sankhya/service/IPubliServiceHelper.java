@@ -66,6 +66,6 @@ public interface IPubliServiceHelper {
 	 */
 	public Provider GetProviderById(int id);
 
-	public ProductionOrder GetProviderNF(int ppCod);
+	public ProductionOrder GetProviderNF(int ppCod, String complemento);
 
 }

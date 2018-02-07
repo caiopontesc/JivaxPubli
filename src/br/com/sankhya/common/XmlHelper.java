@@ -977,8 +977,8 @@ public class XmlHelper {
 			Element tipMov = new Element("TIPMOV");
 			tipMov.setText("P");
 			
-//			Element serieNota = new Element("SERIENOTA");   // Lenilton 02 de fevereiro 2018
-//			serieNota.setText(budget.getComplemento());     // Lenilton 02 de fevereiro 2018
+			Element serieNota = new Element("SERIENOTA");   // Lenilton 02 de fevereiro 2018
+			serieNota.setText(budget.getComplemento());     // Lenilton 02 de fevereiro 2018
 
 			Element dtNeg = new Element("DTNEG");
 			dtNeg.setText(Utils.ConvertMSJSONDateToDate(budget.getDataManutencao()));
@@ -1145,12 +1145,12 @@ public class XmlHelper {
 						Element percDesc2 = new Element("PERCDESC");
 						percDesc2.setText(Double.toString(obj.getDesconto()));
 
-						if (service instanceof PubliAmplaServiceHelper) {
-							nf = new PubliAmplaServiceHelper().GetProviderNF(obj.getPedido());
-						} else if (service instanceof PubliBg9PEServiceHelper) {
-							nf = new PubliBg9PEServiceHelper().GetProviderNF(obj.getPedido());
+						if (service instanceof PubliAmplaServiceHelper) { 
+							nf = new PubliAmplaServiceHelper().GetProviderNF(obj.getPedido(), budget.getComplemento());
+						} else if (service instanceof PubliBg9PEServiceHelper) { 
+							nf = new PubliBg9PEServiceHelper().GetProviderNF(obj.getPedido(), budget.getComplemento());
 						} else {
-							nf = new PubliBg9ALServiceHelper().GetProviderNF(obj.getPedido());
+							nf = new PubliBg9ALServiceHelper().GetProviderNF(obj.getPedido(), budget.getComplemento());
 						}
 
 						if (service instanceof PubliAmplaServiceHelper) {
@@ -1184,6 +1184,7 @@ public class XmlHelper {
 								+ "\nPP: " + obj.getPedido());
 
 						Element dtVenc = new Element("AD_DTVENCIMENTO");
+						
 						dtVenc.setText(Utils
 								.removeInvalidXMLCharacters(nf != null ? Utils.ConvertMSJSONDateToDate(nf.getVencimento()) : ""));
 
@@ -1326,11 +1327,11 @@ public class XmlHelper {
 						percDesc2.setText(Double.toString(obj.getDesconto()));
 
 						if (service instanceof PubliAmplaServiceHelper) {
-							nf = new PubliAmplaServiceHelper().GetProviderNF(obj.getPedido());
+							nf = new PubliAmplaServiceHelper().GetProviderNF(obj.getPedido(), obj.getComplemento());
 						} else if (service instanceof PubliBg9PEServiceHelper) {
-							nf = new PubliBg9PEServiceHelper().GetProviderNF(obj.getPedido());
+							nf = new PubliBg9PEServiceHelper().GetProviderNF(obj.getPedido(), obj.getComplemento());
 						} else {
-							nf = new PubliBg9ALServiceHelper().GetProviderNF(obj.getPedido());
+							nf = new PubliBg9ALServiceHelper().GetProviderNF(obj.getPedido(), obj.getComplemento());
 						}
 
 						if (service instanceof PubliAmplaServiceHelper) {
@@ -1416,7 +1417,7 @@ public class XmlHelper {
 			cabecalho.addContent(dtNeg);
 			cabecalho.addContent(tipMov);
 			
-//			cabecalho.addContent(serieNota);  // Lenilton 02 de fevereiro 2018
+			cabecalho.addContent(serieNota);  // Lenilton 02 de fevereiro 2018
 
 			nota.addContent(cabecalho);
 			nota.addContent(itens);

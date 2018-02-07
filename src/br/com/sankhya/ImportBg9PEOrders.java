@@ -33,8 +33,8 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 			ctx.log("Inicio da importação de Pedidos...");
 
 			InsertPublicationAuth();
-			// InsertMediaOrders();
-			// InsertFixedBudgets();
+			//InsertMediaOrders();
+			//InsertFixedBudgets();
 
 			ctx.log("...Finalização da importação de Pedidos.");
 
@@ -57,7 +57,7 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 	public static void Bg9PE() throws Exception {
 
 		InsertFixedBudgets();
-		InsertPublicationAuth();
+		//InsertPublicationAuth();
 
 		// ctx.setMensagemRetorno("Processo de Importação Finalizado!");
 
@@ -274,8 +274,10 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 
 					}
 
-					if (JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString(item.getNumero()), jivaCookie,
-							"P", RelationCompany(item.getEmpresa()), null) == false) {
+					if (JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA( Integer.toString(item.getNumero()), jivaCookie,
+							                                            "P", 
+							                                            RelationCompany(item.getEmpresa()), 
+							                                            item.getComplemento()) == false) {
 
 						item.setEmpresa(RelationCompany(item.getEmpresa()));
 
