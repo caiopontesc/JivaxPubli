@@ -212,8 +212,10 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 
 					}
 
-					if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString(item.getNumero()), jivaCookie,
-							"P", RelationCompany(item.getEmpresa()), null)) {
+					if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA( Integer.toString(item.getNumero()), jivaCookie,
+							                                             "P", 
+							                                             RelationCompany(item.getEmpresa()), 
+							                                             item.getComplemento())) {
 
 						item.setEmpresa(RelationCompany(item.getEmpresa()));
 

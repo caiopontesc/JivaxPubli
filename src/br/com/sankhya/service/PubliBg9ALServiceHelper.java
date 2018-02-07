@@ -396,7 +396,7 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 	}
 
 	@Override
-	public ProductionOrder GetProviderNF(int ppCod) {
+	public ProductionOrder GetProviderNF(int ppCod, String ppComplemento) {
 
 		ArrayList<ProductionOrder> list = new ArrayList<ProductionOrder>();
 
@@ -407,11 +407,8 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
-			// request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0,
-			// false));
 			request.getFilters().add(new Filter("Numero", Integer.toString(ppCod), 9, 1, 0, false));
-			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
-			// false));
+			request.getFilters().add(new Filter("Complemento", ppComplemento, 9, 1, 0, false));
 			request.setFreeFilter("");
 			request.setLimit("50");
 			request.setOffSet(0);

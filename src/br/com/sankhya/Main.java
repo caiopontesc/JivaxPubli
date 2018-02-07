@@ -26,9 +26,9 @@ public class Main {
 			
 //			System.out.println(Utils.ConvertMSJSONDateToDate("/Date(1513908000000-0200)/"));
 			
-			Ampla();
+			//Ampla();
 			ImportBg9PEOrders.Bg9PE();
-			ImportBg9ALOrders.Bg9AL();
+			//ImportBg9ALOrders.Bg9AL();
 			
 			System.out.println("\n\n...Processo Finalizado.");
 
@@ -168,6 +168,8 @@ public class Main {
 
 			ArrayList<FixedBudget> budgetList = amplaServices.GetFixedBudgetList();
 			
+			//System.out.println(budgetList.size());
+			
 			for (FixedBudget item : budgetList) {
 				Customer customer = amplaServices.GetCustomerById(item.getCodigoCliente());
 
@@ -199,7 +201,7 @@ public class Main {
 							                                             jivaCookie,
 							                                             "P", 
 							                                             RelationCompany(item.getEmpresa()),
-							                                             null)) {
+							                                             item.getComplemento())) {
 
 						item.setEmpresa(RelationCompany(item.getEmpresa()));
 

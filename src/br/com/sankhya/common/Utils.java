@@ -212,6 +212,9 @@ public class Utils {
 
 	public static String RemoveLeftZeros(String initial) {
 
+		if ("".equals(initial))
+		   return initial;
+		
 		String result = "";
 
 		try {

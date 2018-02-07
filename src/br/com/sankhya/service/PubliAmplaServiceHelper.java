@@ -177,9 +177,8 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
-			// request.getFilters().add(new Filter("#Numero#", "40407", 9, 1, 0,
-			// false));
+			//request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
+			request.getFilters().add(new Filter("#Numero#", "45218", 9, 1, 0, false));
 			request.setFreeFilter("");
 			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
@@ -354,22 +353,23 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 	}
 
 	@Override
-	public ProductionOrder GetProviderNF(int ppCod) {
+	public ProductionOrder GetProviderNF(int ppCod, String complemento) {
 
 		ArrayList<ProductionOrder> list = new ArrayList<ProductionOrder>();
 
 		try {
-
+			
 			String obj = "";
 			Gson gson = new Gson();
 
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
-			// request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0,
-			// false));
+			
+			//request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
+			
 			request.getFilters().add(new Filter("#Numero#", Integer.toString(ppCod), 9, 1, 0, false));
-			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
-			// false));
+			request.getFilters().add(new Filter("#Complemento#", complemento, 9, 1, 0, false));
+			
 			request.setFreeFilter("");
 			request.setLimit("50");
 			request.setOffSet(0);
@@ -411,6 +411,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			
 		}
 
+		
 		if (list != null && !list.isEmpty()) {
 			return list.get(0);
 		} else {

@@ -232,7 +232,7 @@ public class JivaServiceHelper {
 				String erro = document.getElementsByTagName("statusMessage").item(0).getTextContent();
 				System.out.println("Não foi possível importar a OC " + budget.getNumero() + ": " + Base64Utils.decode(erro));
 			} else {
-				System.out.println("OC " + budget.getNumero() + " importada com sucesso! Nro Unico: " + nuNota + ".");
+				System.out.println("OC " + budget.getNumero() + " importada com sucesso! Nro Unico: " + nuNota + " Série '"+budget.getComplemento()+"'");
 			}
 			
 		} catch (Throwable e) {
