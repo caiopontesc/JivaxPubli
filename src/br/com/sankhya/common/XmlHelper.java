@@ -1112,12 +1112,10 @@ public class XmlHelper {
 						Element sequencia2 = new Element("SEQUENCIA");
 
 						Element codProd2 = new Element("CODPROD");
-						Element codPedido2 = new Element("AD_CODPEDIDO");
 
 						switch (budget.getSubTipo()) {
 							case executiveProd:
 								codProd2.setText("665");
-								codPedido2.setText(String.valueOf(obj.getPedido()));
 								break;
 							case eletronicProd:
 								codProd2.setText("664");
@@ -1282,12 +1280,10 @@ public class XmlHelper {
 						Element sequencia2 = new Element("SEQUENCIA");
 
 						Element codProd2 = new Element("CODPROD");
-						Element codPedido2 = new Element("AD_CODPEDIDO");
 
 						switch (obj.getSubTipo()) {
 							case executiveProd:
 								codProd2.setText("665");
-								codPedido2.setText(String.valueOf(obj.getPedido()));
 								break;
 							case eletronicProd:
 								codProd2.setText("664");
@@ -1367,7 +1363,8 @@ public class XmlHelper {
 						descr2.setText("CAMPANHA: " + budget.getCampanha() + "\nNOME DO FORNECEDOR: "
 								+ obj.getNomeFornecedor() + "\nNOTA FISCAL DO FORNECEDOR: "
 								+ (nf != null ? nf.getNotaFiscalFornecedor() : "") + "\nCNPJ: " + provider.getCnpj()
-								+ "\nDESCRICAO: " + obj.getDescricao().replace("<br>", " ") + "\nPP: "
+								+ "\nDESCRICAO: " + obj.getDescricao().replace("<br>", " ") 
+								+ "\nPP: "
 								+ obj.getPedido());
 
 						item2.addContent(descr2);
@@ -1425,10 +1422,6 @@ public class XmlHelper {
 			nota.addContent(itens);
 			body.addContent(nota);
 			doc.getRootElement().addContent(body);
-
-			if (budget.getNumero() == 12609) {
-				System.out.println(budget.getSubTipo());
-			}
 
 			return doc;
 

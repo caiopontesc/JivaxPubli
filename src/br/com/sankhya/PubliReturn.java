@@ -40,9 +40,14 @@ public class PubliReturn {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
-		String query = "SELECT DISTINCT CASE WHEN ITE.CODPROD IN (661, 662, 671, 674,675) THEN ? "
-				+ "ELSE ? END AS TIPODOC, CAB.NUMNOTA AS DOCUMENTO, CAB.NUMNFSE AS FATURA,CAB.NUNOTA AS NUNOTA, CAB.CODTIPOPER AS TOP, "
-				+ "TO_CHAR(CAB.DTFATUR, 'YYYY-MM-DD') AS DTSITUACAO, CAB.AD_PIXOC AS PIXOC, "
+		String query = "SELECT DISTINCT "
+//				+ "CASE WHEN ITE.CODPROD IN (661, 662, 671, 674,675) THEN ? ELSE ? END AS TIPODOC, "
+//				+ "CAB.NUMNOTA AS DOCUMENTO, "
+				+ "CAB.NUMNFSE AS FATURA,"
+				+ "CAB.NUNOTA AS NUNOTA, "
+				+ "CAB.CODTIPOPER AS TOP, "
+				+ "TO_CHAR(CAB.DTFATUR, 'YYYY-MM-DD') AS DTSITUACAO, "
+//				+ "CAB.AD_PIXOC AS PIXOC, "
 				+ "CASE WHEN CAB.CODEMP IN (2,3,6) THEN 'Ampla' WHEN CAB.CODEMP = 4 THEN 'BG9 PE' WHEN CAB.CODEMP = 5 THEN 'BG9 AL' ELSE '' END EMPRESA, "
 				+ "CASE WHEN EXISTS (SELECT 1 FROM TGFCAN CAN, TGFCAB_EXC EXC WHERE CAN.NUNOTA = EXC.NUNOTA AND EXC.TIPMOV IN ('V') AND CAN.NUNOTA = CAB.NUNOTA) THEN 'CANCELADA' ELSE 'FATURADA' END STATUS "
 				+ "FROM TGFCAB CAB "
@@ -60,11 +65,11 @@ public class PubliReturn {
 
 			pstmt = conn.prepareStatement(query);
 
-			pstmt.setString(1, "PI");
-			pstmt.setString(2, "OC");
-			pstmt.setDate(3, new java.sql.Date(Utils.GetInvoicedOrderIntervalDateDDMMYYYY().getTime()));
-			pstmt.setDate(4, new java.sql.Date(Utils.GetDateTimeNowDDMMYYY().getTime()));
-			pstmt.setString(5, "V");
+//			pstmt.setString(1, "PI");
+//			pstmt.setString(2, "OC");
+			pstmt.setDate(1, new java.sql.Date(Utils.GetInvoicedOrderIntervalDateDDMMYYYY().getTime()));
+			pstmt.setDate(2, new java.sql.Date(Utils.GetDateTimeNowDDMMYYY().getTime()));
+			pstmt.setString(3, "V");
 
 			ResultSet rs = pstmt.executeQuery();
 
@@ -72,13 +77,13 @@ public class PubliReturn {
 
 				InvoicedOrder order = new InvoicedOrder();
 
-				order.setDocType(rs.getString("TIPODOC"));
+//				order.setDocType(rs.getString("TIPODOC"));
 
-				if (order.getDocType().equals("OC")) {
-					order.setDocNumber(Integer.toString(rs.getInt("DOCUMENTO")));
-				} else {
-					order.setDocNumber(Integer.toString(rs.getInt("PIXOC")));
-				}
+//				if (order.getDocType().equals("OC")) {
+//					order.setDocNumber(Integer.toString(rs.getInt("DOCUMENTO")));
+//				} else {
+//					order.setDocNumber(Integer.toString(rs.getInt("PIXOC")));
+//				}
 
 				order.setEmpresa(rs.getString("EMPRESA"));
 				order.setDtSituation(rs.getString("DTSITUACAO"));
@@ -115,10 +120,21 @@ public class PubliReturn {
 					item.setDocType(docRelacionado.getDocType());
 					item.setDocNumber(docRelacionado.getNUNOTA());
 					
+					// atualiza OC/PI
 					setInvoicedStateOnPubli(item);
+					
+					// atualiza PP
+					if (docRelacionado.getDocType().equals("OC")) {
+						int codPP = getCodPP(docRelacionado.getNUNOTA());
+						if (codPP > 0) {
+							item.setDocNumber(String.valueOf(codPP));
+							item.setDocType("PP");
+							setInvoicedStateOnPubli(item);
+						}
+					}
 				}
 			}
-
+			
 			updateAD_PUBLI(list);
 
 			System.out.println("\n\nAtualização de Status do Publi finalizado.");
@@ -141,6 +157,46 @@ public class PubliReturn {
 
 	}
 
+	private static int getCodPP(String nuNota) throws SQLException {
+		int codPP = 0;
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			
+			conn = JdbcOracleConnection.getDBConnection();
+
+			String query = "SELECT REPLACE(REGEXP_SUBSTR(ITE.observacao, 'PP: ([0-9]+)'), 'PP: ', '') AS NUM_PP "
+							+ "FROM TGFITE ITE "
+							+ "INNER JOIN TGFCAB CAB ON CAB.NUNOTA = ITE.NUNOTA "
+							+ "WHERE NUMNOTA = ? AND REGEXP_SUBSTR(ITE.observacao, 'PP: ([0-9]+)') IS NOT NULL";
+			
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, Integer.valueOf(nuNota));
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				codPP = rs.getInt("NUM_PP");
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			
+			if (pstmt != null) {
+				pstmt.close();
+			}
+
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		
+		return codPP;
+	}
+
 	private static List<InvoicedOrder> getDocumentosRelacionados(String nunota) throws SQLException {
 		List<InvoicedOrder> documentosRelacionados = new ArrayList<>();
 		
@@ -150,7 +206,7 @@ public class PubliReturn {
 		try {
 
 			conn = JdbcOracleConnection.getDBConnection();
-
+			
 			String query = "SELECT DISTINCT " + 
 				  " CASE WHEN CAB.AD_PIXOC IS NOT NULL THEN CAB.AD_PIXOC ELSE CAB.NUMNOTA END NUMNOTA," + 
 	              " CASE WHEN ITE.CODPROD IN (661, 662, 671, 674, 675) THEN 'PI' ELSE 'OC' END AS TIPODOC," + 
@@ -174,8 +230,6 @@ public class PubliReturn {
 				
 				documentosRelacionados.add(docRelacionado);
 			}
-			
-			return documentosRelacionados;
 			
 		} catch (Exception e) {
 			
@@ -220,7 +274,8 @@ public class PubliReturn {
 				System.out.println("Erro ao atualizar o processo de número " + order.getDocNumber() + ".\n"
 									+ "Mais detalhes: " + obj);
 			} else {
-				System.out.println("Empresa "+order.getEmpresa()+": Processo de número " + order.getDocNumber() + " atualizado!");
+				System.out.println("Empresa " + order.getEmpresa() + ": Processo (" + order.getDocType()
+						+ ") de número " + order.getDocNumber() + " atualizado!");
 			}
 
 			conn.disconnect();
