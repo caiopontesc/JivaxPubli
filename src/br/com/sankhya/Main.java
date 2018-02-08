@@ -26,9 +26,9 @@ public class Main {
 			
 //			System.out.println(Utils.ConvertMSJSONDateToDate("/Date(1513908000000-0200)/"));
 			
-			//Ampla();
+			Ampla();
 			ImportBg9PEOrders.Bg9PE();
-			//ImportBg9ALOrders.Bg9AL();
+			ImportBg9ALOrders.Bg9AL();
 			
 			System.out.println("\n\n...Processo Finalizado.");
 

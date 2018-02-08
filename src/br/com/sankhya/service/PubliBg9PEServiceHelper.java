@@ -172,8 +172,8 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			//request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
-			request.getFilters().add(new Filter("#Numero#", "13031", 9, 1, 0, false));
+			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
+			//request.getFilters().add(new Filter("#Numero#", "13031", 9, 1, 0, false));
 			request.setFreeFilter("");
 			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
@@ -191,7 +191,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 				conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
 				String input = gson.toJson(request);
-
+				
 				OutputStream os = conn.getOutputStream();
 				os.write(input.getBytes("UTF-8"));
 				os.flush();
@@ -382,7 +382,11 @@ System.out.println(input);
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
 			String input = gson.toJson(request);
+			
+			//System.out.println(getURLEnviroment(getProductionOrderService));
 
+			//System.out.println(input);
+			
 			OutputStream os = conn.getOutputStream();
 			os.write(input.getBytes("UTF-8"));
 			os.flush();

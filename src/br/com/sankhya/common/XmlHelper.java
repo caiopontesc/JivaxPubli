@@ -1145,6 +1145,7 @@ public class XmlHelper {
 						Element percDesc2 = new Element("PERCDESC");
 						percDesc2.setText(Double.toString(obj.getDesconto()));
 
+						System.out.println(obj.getPedido());
 						if (service instanceof PubliAmplaServiceHelper) { 
 							nf = new PubliAmplaServiceHelper().GetProviderNF(obj.getPedido(), budget.getComplemento());
 						} else if (service instanceof PubliBg9PEServiceHelper) { 

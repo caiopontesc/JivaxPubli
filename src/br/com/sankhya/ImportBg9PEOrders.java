@@ -57,7 +57,7 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 	public static void Bg9PE() throws Exception {
 
 		InsertFixedBudgets();
-		//InsertPublicationAuth();
+		InsertPublicationAuth();
 
 		// ctx.setMensagemRetorno("Processo de Importação Finalizado!");
 
