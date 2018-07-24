@@ -82,25 +82,6 @@ public class FixedBudget {
 	private double ValorTerceiros;
 	private double Verba;
 	private String Vencimento;
-	private double ValorLiquido;  // Lenilton,  25 de fevereiro de 2018 
-	private ArrayList<ProductionOrderInstallment> Parcelas;  // Lenilton, 25 de fevereiro de 2018
-	
-	
-	public ArrayList<ProductionOrderInstallment> getParcelas() {
-		return Parcelas;
-	}
-
-	public void setParcelas(ArrayList<ProductionOrderInstallment> parcelas) {
-		Parcelas = parcelas;
-	}
-
-	public double getValorLiquido() {
-		return ValorLiquido;
-	}
-
-	public void setValorLiquido(double valorLiquido) {
-		ValorLiquido = valorLiquido;
-	}
 
 	public boolean isChecked() {
 		return Checked;

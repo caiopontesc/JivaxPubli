@@ -6,24 +6,26 @@
 	<classpathentry kind="lib" path="out/artifacts/JivaXPubliReturn/JivaXPubliReturn.jar"/>
 	<classpathentry kind="lib" path="skw-cuckoo.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/bsh-1.3.0.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/commons-net-3.3.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/ejb-management.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/gson-2.6.2.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/jape.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/javax.servlet.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/javax.servlet.jsp.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/jboss-j2ee.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/jbossall-client.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/jdom-1.1.3-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/jdom-1.1.3-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/jdom-1.1.3.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/jersey-bundle-1.19.1.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/mge-modelcore.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/ojdbc6.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/SankhyaW-extensions.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/sanutil.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/sanws.jar"/>
-	<classpathentry kind="lib" path="C:/Desenvolvimento - WORK/Projetos - Copia de Seguranca/Libs/libjar/lib_jars/skwextensiontool.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/bsh-1.3.0.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/commons-net-3.3.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/ejb-management.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/gson-2.6.2.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/jape.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/javax.servlet.jsp.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/jboss-j2ee.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/jbossall-client.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/jdom-1.1.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/jdom-1.1.3-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/jdom-1.1.3.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/jersey-bundle-1.19.1.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/mge-modelcore.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/org.json.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/SankhyaW-extensions.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/sanutil.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/sanws.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/skw-cuckoo.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/skwextensiontool.jar"/>
+	<classpathentry kind="lib" path="/Users/andrebuarque/Documents/Sankhya/lib_jars/ojdbc6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

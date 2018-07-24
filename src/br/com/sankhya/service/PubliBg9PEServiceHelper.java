@@ -104,18 +104,17 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
 			
-			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
-			//request.getFilters().add(new Filter("#PlanilhaNumero#", "18943", 9, 1, 0, false));
+			//request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
+			request.getFilters().add(new Filter("#PlanilhaNumero#", "21123", 9, 1, 0, false));
 			
+			// request.getFilters().add(new Filter("#Numero#", "60084", 9, 1, 0,
+			// false));
 			request.setFreeFilter("");
 			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
 			request.setIdRegUsu(getPublicookie());
 
 			do {
-	
-				// Limpa array de controle do loop - Lenilton, 11 de março de 2018
-				fromJson.clear();
 				
 				request.setOffSet(offset);
 				
@@ -137,15 +136,10 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 				Type listType = new TypeToken<ArrayList<MediaOrder>>() {
 				}.getType();
 
-				// Atribui json ao array de controle - Lenilton, 11 de março de 2018
-				fromJson = gson.fromJson(obj, listType); 
+				list = gson.fromJson(obj, listType);
 
-				list.addAll(fromJson);
-
-				//System.out.println("Total Json: "+fromJson.size());
-				//System.out.println("Total List: "+list.size());
 				conn.disconnect();
-
+				
 				offset++;
 				
 			} while (!fromJson.isEmpty() && fromJson.size() == LIMIT); 
@@ -179,16 +173,13 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
 			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
-			//request.getFilters().add(new Filter("#Numero#", "20863", 9, 1, 0, false));
+			//request.getFilters().add(new Filter("#Numero#", "13031", 9, 1, 0, false));
 			request.setFreeFilter("");
 			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
 			request.setIdRegUsu(getPublicookie());
 
 			do {
-				
-				// Limpa array de controle do loop - Lenilton, 11 de março de 2018
-				fromJson.clear();
 				
 				request.setOffSet(offset);
 				
@@ -264,6 +255,7 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
 			String input = gson.toJson(request);
+System.out.println(input);
 			OutputStream os = conn.getOutputStream();
 			os.write(input.getBytes("UTF-8"));
 			os.flush();
@@ -372,8 +364,8 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
 
-			request.getFilters().add(new Filter("#Numero#", Integer.toString(ppCod), 9, 1, 0, false));
-			request.getFilters().add(new Filter("#Complemento#", ppComplemento, 9, 1, 0, false));
+			request.getFilters().add(new Filter("Numero", Integer.toString(ppCod), 9, 1, 0, false));
+			request.getFilters().add(new Filter("Complemento", ppComplemento, 9, 1, 0, false));
 			
 			request.setFreeFilter("");
 			request.setLimit("50");
@@ -391,11 +383,16 @@ public class PubliBg9PEServiceHelper implements IPubliServiceHelper {
 
 			String input = gson.toJson(request);
 			
+			//System.out.println(getURLEnviroment(getProductionOrderService));
+
+			//System.out.println(input);
+			
 			OutputStream os = conn.getOutputStream();
 			os.write(input.getBytes("UTF-8"));
 			os.flush();
 
 			obj = Utils.ConvertInputStreamToJsonString(conn.getInputStream());
+
 			// System.out.println(obj);
 
 			Type listType = new TypeToken<ArrayList<ProductionOrder>>() {

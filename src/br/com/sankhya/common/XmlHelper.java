@@ -1,7 +1,5 @@
 package br.com.sankhya.common;
 
-import java.util.ArrayList;
-
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -21,7 +19,6 @@ import br.com.sankhya.domain.Item;
 import br.com.sankhya.domain.MediaOrder;
 import br.com.sankhya.domain.MediaOrderInstallment;
 import br.com.sankhya.domain.ProductionOrder;
-import br.com.sankhya.domain.ProductionOrderInstallment;
 import br.com.sankhya.domain.Provider;
 import br.com.sankhya.service.JivaServiceHelper;
 import br.com.sankhya.service.PubliAmplaServiceHelper;
@@ -207,18 +204,10 @@ public class XmlHelper {
 
 		// expression
 		Element expression = new Element("expression");
-		if(complemento.equals("")) {
-			expression.setText( "this.NUMNOTA = " + numNota + 
-		            " AND this.TIPMOV = '" + tipMov + 
-		            "' AND this.CODEMP = " + Integer.toString(codEmp) + 
-		            " AND this.SERIENOTA IS NULL "); 
-		} else {
-			expression.setText( "this.NUMNOTA = " + numNota + 
-		            " AND this.TIPMOV = '" + tipMov + 
-		            "' AND this.CODEMP = " + Integer.toString(codEmp) + 
-		            " AND this.SERIENOTA = '" + complemento + "' "); 
-		}
-		
+		expression.setText( "this.NUMNOTA = " + numNota + 
+				            " AND this.TIPMOV = '" + tipMov + 
+				            "' AND this.CODEMP = " + Integer.toString(codEmp) + 
+				            " AND (this.SERIENOTA = '" + complemento + "' OR this.SERIENOTA IS NULL )"); 
 		//System.out.println("Expressao: "+expression.getText());
 
 		criteria.addContent(expression);
@@ -960,7 +949,6 @@ public class XmlHelper {
 
 		try {
 
-			
 			// Body
 			Element body = new Element("requestBody");
 			// nota
@@ -1049,7 +1037,6 @@ public class XmlHelper {
 			qtdNeg.setText("1");
 
 			Element vlrUnit = new Element("VLRUNIT");
-
 			vlrUnit.setText(Double.toString(budget.getHonorarios()));
 
 			Element percDesc = new Element("PERCDESC");
@@ -1086,7 +1073,7 @@ public class XmlHelper {
 
 						Element vlrUnit2 = new Element("VLRUNIT");
 						vlrUnit2.setText(Double.toString(obj.getValorUnitario()));
-						
+
 						//Levava em consideração o valor de desconto
 						/*
 						 * Element vlrDesc2 = new Element("VLRDESC");
@@ -1155,10 +1142,10 @@ public class XmlHelper {
 						Element vlrUnit2 = new Element("VLRUNIT");
 						vlrUnit2.setText(Double.toString(obj.getValorUnitario()));
 
-						
 						Element percDesc2 = new Element("PERCDESC");
 						percDesc2.setText(Double.toString(obj.getDesconto()));
 
+						System.out.println(obj.getPedido());
 						if (service instanceof PubliAmplaServiceHelper) { 
 							nf = new PubliAmplaServiceHelper().GetProviderNF(obj.getPedido(), budget.getComplemento());
 						} else if (service instanceof PubliBg9PEServiceHelper) { 
@@ -1166,13 +1153,6 @@ public class XmlHelper {
 						} else {
 							nf = new PubliBg9ALServiceHelper().GetProviderNF(obj.getPedido(), budget.getComplemento());
 						}
-						
-						try {
-                          	vlrUnit2.setText(Double.toString(nf.getValorLiquido()));  // Lenilton 25 de fevereiro de 2018
-							
-						} catch (Exception e) {
-							// TODO: handle exception
-						} 
 
 						if (service instanceof PubliAmplaServiceHelper) {
 							provider = new PubliAmplaServiceHelper().GetProviderById(obj.getCodigoFornecedor());
@@ -1335,7 +1315,7 @@ public class XmlHelper {
 						}
 
 						Element vlrUnit2 = new Element("VLRUNIT");
-						//vlrUnit2.setText(Double.toString(obj.getValorUnitario()));
+						vlrUnit2.setText(Double.toString(obj.getValorUnitario()));
 
 						//Levava em consideração o valor de desconto
 						/*
@@ -1355,8 +1335,6 @@ public class XmlHelper {
 							nf = new PubliBg9ALServiceHelper().GetProviderNF(obj.getPedido(), obj.getComplemento());
 						}
 
-						vlrUnit2.setText(Double.toString(nf.getValorLiquido()));  // Lenilton 25 de fevereiro de 2018
-						
 						if (service instanceof PubliAmplaServiceHelper) {
 							provider = new PubliAmplaServiceHelper().GetProviderById(obj.getCodigoFornecedor());
 						} else if (service instanceof PubliBg9PEServiceHelper) {

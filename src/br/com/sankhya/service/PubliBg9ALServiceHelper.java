@@ -108,9 +108,6 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 
 			do {
 
-				// Limpa array de controle do loop - Lenilton, 11 de março de 2018
-				fromJson.clear();
-				
 				request.setOffSet(offset);
 				
 				URL url = new URL(getURLEnviroment(getMediaOrderService));
@@ -410,8 +407,8 @@ public class PubliBg9ALServiceHelper implements IPubliServiceHelper {
 
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
-			request.getFilters().add(new Filter("#Numero#", Integer.toString(ppCod), 9, 1, 0, false));
-			request.getFilters().add(new Filter("#Complemento#", ppComplemento, 9, 1, 0, false));
+			request.getFilters().add(new Filter("Numero", Integer.toString(ppCod), 9, 1, 0, false));
+			request.getFilters().add(new Filter("Complemento", ppComplemento, 9, 1, 0, false));
 			request.setFreeFilter("");
 			request.setLimit("50");
 			request.setOffSet(0);

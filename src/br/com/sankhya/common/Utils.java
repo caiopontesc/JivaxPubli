@@ -10,19 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import br.com.sankhya.domain.MediaOrderInstallment;
-
 public class Utils {
-
-	/**
-	 * Valida a situa��o da parcela
-	 * 
-	 * @param parcela
-	 * @return
-	 */
-	public static boolean ValidaParcela(MediaOrderInstallment parcela) {
-		return "L".equals(parcela.getSituacaoDB());
-	}
 
 	/**
 	 * Pega da atual no formato yyyy-MM-dd
@@ -89,7 +77,7 @@ public class Utils {
 		try {
 
 			final Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.DATE, -10);
+			cal.add(Calendar.DATE, -7);
 
 			dateobj = cal.getTime();
 
@@ -202,6 +190,7 @@ public class Utils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		return json;
 	}
 
@@ -222,17 +211,15 @@ public class Utils {
 	}
 
 	public static String RemoveLeftZeros(String initial) {
+
+		if ("".equals(initial))
+		   return initial;
 		
 		String result = "";
 
 		try {
 
-			String replaceAll = initial.replaceAll("[a-zA-Z]", "");
-			
-			if ("".equals(replaceAll))
-				   return replaceAll;
-			
-			result = Integer.toString(Integer.parseInt(replaceAll));
+			result = Integer.toString(Integer.parseInt(initial.replaceAll("[a-zA-Z]", "")));
 
 		} catch (Exception e) {
 			e.printStackTrace();

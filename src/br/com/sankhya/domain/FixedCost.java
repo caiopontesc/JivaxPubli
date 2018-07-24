@@ -81,15 +81,6 @@ public class FixedCost {
 	private double ValorFornecedorUnitario;
 	private double ValorOriginal;
 	private double ValorUnitario;
-	private double ValorLiquido;
-
-	public double getValorLiquido() {
-		return ValorLiquido;
-	}
-
-	public void setValorLiquido(double valorLiquido) {
-		ValorLiquido = valorLiquido;
-	}
 
 	public boolean isChecked() {
 		return Checked;
