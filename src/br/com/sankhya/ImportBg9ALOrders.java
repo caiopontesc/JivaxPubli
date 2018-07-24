@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.cuckoo.core.ScheduledAction;
 import org.cuckoo.core.ScheduledActionContext;
 
+import br.com.sankhya.common.Utils;
 import br.com.sankhya.domain.Customer;
 import br.com.sankhya.domain.FixedBudget;
 import br.com.sankhya.domain.MediaOrder;
@@ -58,14 +59,8 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 
 		try {
 
-			// ctx.confirmar("Importar Processos BG9 AL",
-			// "Ao clicar em OK o integrador efetuará a importação dos processos
-			// da BG9 AL. Deseja continuar?", 1);
-
 			InsertPublicationAuth();
 			InsertFixedBudgets();
-
-			// ctx.setMensagemRetorno("Processo de Importação Finalizado!");
 
 		} catch (Exception e) {
 			StringWriter errors = new StringWriter();
@@ -84,7 +79,7 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 		try {
 
 			ArrayList<MediaOrder> mediaOrderList = bg9ALServices.GetMediaOrderList();
-			
+
 			for (MediaOrder item : mediaOrderList) {
 
 				Customer customer = bg9ALServices.GetCustomerById(item.getCodigoCliente());
@@ -98,71 +93,58 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 				if (!customer.getSituacao().isEmpty()) {
 
 					// Verifica Cliente
-					if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
-							RemoveSpecialCharacters(customer.getCnpj()), jivaCookie,
-							Integer.toString(customer.getCodigo()))) {
+					if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(RemoveSpecialCharacters(customer.getCnpj()),
+							jivaCookie, Integer.toString(customer.getCodigo()))) {
 
 						JivaServiceHelper.InsertCustomer(customer, jivaCookie, Integer.toString(customer.getCodigo()));
 
-						customerId = JivaServiceHelper.GetCustomerIdByCNPJ(
-								RemoveSpecialCharacters(customer.getCnpj()), jivaCookie,
-								Integer.toString(customer.getCodigo()));
+						customerId = JivaServiceHelper.GetCustomerIdByCNPJ(RemoveSpecialCharacters(customer.getCnpj()),
+								jivaCookie, Integer.toString(customer.getCodigo()));
 
 					} else {
 
-						customerId = JivaServiceHelper.GetCustomerIdByCNPJ(
-								RemoveSpecialCharacters(customer.getCnpj()), jivaCookie,
-								Integer.toString(customer.getCodigo()));
+						customerId = JivaServiceHelper.GetCustomerIdByCNPJ(RemoveSpecialCharacters(customer.getCnpj()),
+								jivaCookie, Integer.toString(customer.getCodigo()));
 
 						JivaServiceHelper.UpdateCustomer(customer, customerId, jivaCookie);
 
 					}
 
-
 					// Verifica Fornecedor
-					if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
-							RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
-							Integer.toString(provider.getCodigo()))) {
+					if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(RemoveSpecialCharacters(provider.getCnpj()),
+							jivaCookie, Integer.toString(provider.getCodigo()))) {
 
 						JivaServiceHelper.InsertProvider(provider, jivaCookie, Integer.toString(provider.getCodigo()));
 
-						providerId = JivaServiceHelper.GetCustomerIdByCNPJ(
-								RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
-								Integer.toString(provider.getCodigo()));
+						providerId = JivaServiceHelper.GetCustomerIdByCNPJ(RemoveSpecialCharacters(provider.getCnpj()),
+								jivaCookie, Integer.toString(provider.getCodigo()));
 
 					} else {
 
-						providerId = JivaServiceHelper.GetCustomerIdByCNPJ(
-								RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
-								Integer.toString(provider.getCodigo()));
+						providerId = JivaServiceHelper.GetCustomerIdByCNPJ(RemoveSpecialCharacters(provider.getCnpj()),
+								jivaCookie, Integer.toString(provider.getCodigo()));
 
 						JivaServiceHelper.UpdateProvider(provider, providerId, jivaCookie);
 
 					}
 
-
 					item.setEmpresa(RelationCompany(item.getEmpresa()));
 
-                    ArrayList<MediaOrderInstallment> pesqParcelaLista = item.getParcelas();
-                    
-                    for(MediaOrderInstallment parcela: pesqParcelaLista) {
-                    	
-    					if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA( Integer.toString(item.getPlanilhaNumero()),
-    							                                             jivaCookie, 
-    							                                             "P", 
-    							                                             item.getEmpresa(), 
-    							                                             parcela.getComplemento()) ) {
+					ArrayList<MediaOrderInstallment> pesqParcelaLista = item.getParcelas();
 
+					for (MediaOrderInstallment parcela : pesqParcelaLista) {
+						if (!Utils.ValidaParcela(parcela)) {
+							continue;
+						}
 
-    						JivaServiceHelper.InsertPublicationAuth( item, 
-    								                                 jivaCookie, 
-    								                                 customerId, 
-    								                                 providerId,
-    								                                 provider.getCnpj(), 
-    								                                 parcela );
+						if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString(item.getPlanilhaNumero()),
+								jivaCookie, "P", item.getEmpresa(), parcela.getComplemento())) {
 
-    					}
-                    }
+							JivaServiceHelper.InsertPublicationAuth(item, jivaCookie, customerId, providerId,
+									provider.getCnpj(), parcela);
+
+						}
+					}
 
 				}
 
@@ -173,7 +155,6 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 		}
 
 	}
-
 
 	/**
 	 * Insere as OCs no Portal de Vendas
@@ -192,30 +173,25 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 
 				if (!customer.getSituacao().isEmpty()) {
 
-					if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
-							RemoveSpecialCharacters(customer.getCnpj()), jivaCookie,
-							Integer.toString(customer.getCodigo()))) {
+					if (!JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(RemoveSpecialCharacters(customer.getCnpj()),
+							jivaCookie, Integer.toString(customer.getCodigo()))) {
 
 						JivaServiceHelper.InsertCustomer(customer, jivaCookie, Integer.toString(customer.getCodigo()));
 
-						customerId = JivaServiceHelper.GetCustomerIdByCNPJ(
-								RemoveSpecialCharacters(customer.getCnpj()), jivaCookie,
-								Integer.toString(customer.getCodigo()));
+						customerId = JivaServiceHelper.GetCustomerIdByCNPJ(RemoveSpecialCharacters(customer.getCnpj()),
+								jivaCookie, Integer.toString(customer.getCodigo()));
 
 					} else {
 
-						customerId = JivaServiceHelper.GetCustomerIdByCNPJ(
-								RemoveSpecialCharacters(customer.getCnpj()), jivaCookie,
-								Integer.toString(customer.getCodigo()));
+						customerId = JivaServiceHelper.GetCustomerIdByCNPJ(RemoveSpecialCharacters(customer.getCnpj()),
+								jivaCookie, Integer.toString(customer.getCodigo()));
 
 						JivaServiceHelper.UpdateCustomer(customer, customerId, jivaCookie);
 
 					}
 
-					if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA( Integer.toString(item.getNumero()), jivaCookie,
-							                                             "P", 
-							                                             RelationCompany(item.getEmpresa()), 
-							                                             item.getComplemento())) {
+					if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString(item.getNumero()), jivaCookie,
+							"P", RelationCompany(item.getEmpresa()), item.getComplemento())) {
 
 						item.setEmpresa(RelationCompany(item.getEmpresa()));
 
@@ -260,33 +236,29 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 
 				if (!provider.getSituacao().isEmpty()) {
 
-					if (JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
-							RemoveSpecialCharacters(customer.getCnpj()), jivaCookie,
-							Integer.toString(customer.getCodigo())) == false) {
+					if (JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(RemoveSpecialCharacters(customer.getCnpj()),
+							jivaCookie, Integer.toString(customer.getCodigo())) == false) {
 
 						JivaServiceHelper.InsertCustomer(customer, jivaCookie, Integer.toString(customer.getCodigo()));
 
 					} else {
 
-						customerId = JivaServiceHelper.GetCustomerIdByCNPJ(
-								RemoveSpecialCharacters(customer.getCnpj()), jivaCookie,
-								Integer.toString(customer.getCodigo()));
+						customerId = JivaServiceHelper.GetCustomerIdByCNPJ(RemoveSpecialCharacters(customer.getCnpj()),
+								jivaCookie, Integer.toString(customer.getCodigo()));
 
 						JivaServiceHelper.UpdateCustomer(customer, customerId, jivaCookie);
 
 					}
 
-					if (JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
-							RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
-							Integer.toString(provider.getCodigo())) == false) {
+					if (JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(RemoveSpecialCharacters(provider.getCnpj()),
+							jivaCookie, Integer.toString(provider.getCodigo())) == false) {
 
 						JivaServiceHelper.InsertProvider(provider, jivaCookie, Integer.toString(provider.getCodigo()));
 
 					} else {
 
-						providerId = JivaServiceHelper.GetCustomerIdByCNPJ(
-								RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
-								Integer.toString(provider.getCodigo()));
+						providerId = JivaServiceHelper.GetCustomerIdByCNPJ(RemoveSpecialCharacters(provider.getCnpj()),
+								jivaCookie, Integer.toString(provider.getCodigo()));
 
 						JivaServiceHelper.UpdateProvider(provider, providerId, jivaCookie);
 
@@ -333,21 +305,18 @@ public class ImportBg9ALOrders implements AcaoRotinaJava, ScheduledAction {
 
 				if (!provider.getSituacao().equals("")) {
 
-					if (JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(
-							RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
-							Integer.toString(provider.getCodigo())) == false) {
+					if (JivaServiceHelper.VerifyIfCustomerExistsByCNPJ(RemoveSpecialCharacters(provider.getCnpj()),
+							jivaCookie, Integer.toString(provider.getCodigo())) == false) {
 
 						JivaServiceHelper.InsertProvider(provider, jivaCookie, Integer.toString(provider.getCodigo()));
 
-						providerId = JivaServiceHelper.GetCustomerIdByCNPJ(
-								RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
-								Integer.toString(provider.getCodigo()));
+						providerId = JivaServiceHelper.GetCustomerIdByCNPJ(RemoveSpecialCharacters(provider.getCnpj()),
+								jivaCookie, Integer.toString(provider.getCodigo()));
 
 					} else {
 
-						providerId = JivaServiceHelper.GetCustomerIdByCNPJ(
-								RemoveSpecialCharacters(provider.getCnpj()), jivaCookie,
-								Integer.toString(provider.getCodigo()));
+						providerId = JivaServiceHelper.GetCustomerIdByCNPJ(RemoveSpecialCharacters(provider.getCnpj()),
+								jivaCookie, Integer.toString(provider.getCodigo()));
 
 						JivaServiceHelper.UpdateProvider(provider, providerId, jivaCookie);
 

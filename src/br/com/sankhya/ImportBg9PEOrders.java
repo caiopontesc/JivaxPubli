@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import org.cuckoo.core.ScheduledAction;
 import org.cuckoo.core.ScheduledActionContext;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import br.com.sankhya.common.Utils;
 import br.com.sankhya.domain.Customer;
 import br.com.sankhya.domain.FixedBudget;
@@ -56,7 +54,7 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 
 	public static void Bg9PE() throws Exception {
 
-		InsertFixedBudgets();
+		// InsertFixedBudgets();
 		InsertPublicationAuth();
 
 		// ctx.setMensagemRetorno("Processo de Importação Finalizado!");
@@ -71,10 +69,7 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 		try {
 
 			ArrayList<MediaOrder> mediaOrderList = bg9PEServices.GetMediaOrderList();
-			
-//			System.out.println("PLANILHA - MIDIA");
-//			System.out.println(mediaOrderList);
-			
+			//System.out.println(mediaOrderList.size());
 			for (MediaOrder item : mediaOrderList) {
 
 				Customer customer = bg9PEServices.GetCustomerById(item.getCodigoCliente());
@@ -132,7 +127,12 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 					ArrayList<MediaOrderInstallment> pesqParcelaLista = item.getParcelas();  
 					
 					for(MediaOrderInstallment parcela : pesqParcelaLista) {
+						if (!Utils.ValidaParcela(parcela)) {
+							continue;
+						}
 						
+						//System.out.println(item.getPlanilhaNumero());
+
 						if (JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA(Integer.toString( item.getPlanilhaNumero()),
 								                                                             jivaCookie, 
 								                                                             "P", 
@@ -273,6 +273,8 @@ public class ImportBg9PEOrders implements AcaoRotinaJava, ScheduledAction {
 						JivaServiceHelper.UpdateCustomer(customer, customerId, jivaCookie);
 
 					}
+
+					//System.out.println(item.getNumero());
 
 					if (JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA( Integer.toString(item.getNumero()), jivaCookie,
 							                                            "P", 

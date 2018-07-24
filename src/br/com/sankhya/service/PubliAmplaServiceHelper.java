@@ -26,15 +26,15 @@ import br.com.sankhya.domain.StructuredBudget;
 
 public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 
-	private static final String loginService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/Login?usuario=API&senha=p4237&empresa=1";
-	private static final String getStructuredBudgetService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosEstruturados";
-	private static final String getFixedBudgetService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosFixos";
-	private static final String getMediaOrderService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosMidia";
-	private static final String getProductionOrderService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosProducao";
-	private static final String getCustomerService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetClientes";
-	private static final String getCustomerServiceById = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetClienteByKey?";
-	private static final String getProviderServiceById = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedorByKey?";
-	private static final String getProviderService = "http://apiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedores";
+	private static final String loginService = "http://homologaapiduca.publicloud.com.br/Services/IntegracaoService.svc/Login?usuario=API&senha=p4237&empresa=1";
+	private static final String getStructuredBudgetService = "http://homologaapiduca.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosEstruturados";
+	private static final String getFixedBudgetService = "http://homologaapiduca.publicloud.com.br/Services/IntegracaoService.svc/GetOrcamentosFixos";
+	private static final String getMediaOrderService = "http://homologaapiduca.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosMidia";
+	private static final String getProductionOrderService = "http://homologaapiduca.publicloud.com.br/Services/IntegracaoService.svc/GetPedidosProducao";
+	private static final String getCustomerService = "http://homologaapiduca.publicloud.com.br/Services/IntegracaoService.svc/GetClientes";
+	private static final String getCustomerServiceById = "http://homologaapiduca.publicloud.com.br/Services/IntegracaoService.svc/GetClienteByKey?";
+	private static final String getProviderServiceById = "http://homologaapiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedorByKey?";
+	private static final String getProviderService = "http://homologaapiduca.publicloud.com.br/Services/IntegracaoService.svc/GetFornecedores";
 	private static final String publiCookie = new PubliAmplaServiceHelper().Login();
 
 	private static final boolean producao = true;
@@ -110,18 +110,28 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
+
+			/*
+			 * Valor do parâmetro 3 0-None 1-Like 2-StartWith 3-NotLike 4-Less
+			 * 5-LessOrEqual 6-Greater 7-GreaterOrEqual 8-NotEqual 9-Equal 10-In
+			 */
+
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
 			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
-//			request.getFilters().add(new Filter("#PlanilhaNumero#", "67695", 9, 1, 0, false));
+			// request.getFilters().add(new Filter("#PlanilhaNumero#", "67403",
+			// 9, 1, 0, false));
 			request.setFreeFilter("");
 			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
 			request.setIdRegUsu(getPublicookie());
 
 			do {
-				
+
+				// Limpa array de controle - Lenilton, 11 de março de 2018
+				fromJson.clear();
+
 				request.setOffSet(offset);
-				
+
 				URL url = new URL(getURLEnviroment(getMediaOrderService));
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setDoOutput(true);
@@ -141,12 +151,13 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 				}.getType();
 
 				fromJson = gson.fromJson(obj, listType);
+
 				list.addAll(fromJson);
-				
+
 				conn.disconnect();
-				
+
 				offset++;
-				
+
 			} while (!fromJson.isEmpty() && fromJson.size() == LIMIT);
 
 		} catch (MalformedURLException e) {
@@ -156,7 +167,6 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 		} catch (IOException e) {
 
 			System.out.println(e.getMessage());
-
 		}
 
 		return list;
@@ -168,7 +178,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 		ArrayList<FixedBudget> fromJson = new ArrayList<FixedBudget>();
 		ArrayList<FixedBudget> list = new ArrayList<FixedBudget>();
 		int offset = 0;
-		
+
 		try {
 
 			String obj = "";
@@ -178,16 +188,21 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
 			request.getFilters().add(new Filter("#DataManutencao#", Utils.GetYesterdayDateYYMMDD(), 7, 1, 0, false));
-			//request.getFilters().add(new Filter("#Numero#", "45218", 9, 1, 0, false));
+			// request.getFilters().add(new Filter("#Numero#", "45291", 9, 1, 0,
+			// false));
 			request.setFreeFilter("");
 			request.setLimit(String.valueOf(LIMIT));
 			request.setOptions("");
 			request.setIdRegUsu(getPublicookie());
 
 			do {
-				
+
+				// Limpa array de controle do loop - Lenilton, 11 de março de
+				// 2018
+				fromJson.clear();
+
 				request.setOffSet(offset);
-				
+
 				URL url = new URL(getURLEnviroment(getFixedBudgetService));
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setDoOutput(true);
@@ -196,7 +211,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 				conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
 
 				String input = gson.toJson(request);
-				
+
 				OutputStream os = conn.getOutputStream();
 				os.write(input.getBytes("UTF-8"));
 				os.flush();
@@ -210,9 +225,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 				list.addAll(fromJson);
 
 				conn.disconnect();
-				
+
 				offset++;
-				
+
 			} while (!fromJson.isEmpty() && fromJson.size() == LIMIT);
 
 		} catch (MalformedURLException e) {
@@ -220,7 +235,7 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-		
+
 		return list;
 
 	}
@@ -239,7 +254,8 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 			request.getFields().add("*");
 			request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
 			request.getFilters().add(new Filter("Orcamento", Integer.toString(codOC), 9, 1, 0, false));
-			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0, false));
+			// request.getFilters().add(new Filter("DTMANU", "2720", 7, 1, 0,
+			// false));
 			request.setFreeFilter("");
 			request.setLimit("50");
 			request.setOffSet(0);
@@ -357,18 +373,19 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 		ArrayList<ProductionOrder> list = new ArrayList<ProductionOrder>();
 
 		try {
-			
+
 			String obj = "";
 			Gson gson = new Gson();
 
 			PubliGetListParam request = new PubliGetListParam();
 			request.getFields().add("*");
-			
-			//request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0, false));
-			
+
+			// request.getFilters().add(new Filter("SITUACAO", "L", 9, 1, 0,
+			// false));
+
 			request.getFilters().add(new Filter("#Numero#", Integer.toString(ppCod), 9, 1, 0, false));
 			request.getFilters().add(new Filter("#Complemento#", complemento, 9, 1, 0, false));
-			
+
 			request.setFreeFilter("");
 			request.setLimit("50");
 			request.setOffSet(0);
@@ -407,10 +424,9 @@ public class PubliAmplaServiceHelper implements IPubliServiceHelper {
 		} catch (IOException e) {
 
 			System.out.println(e.getMessage());
-			
+
 		}
 
-		
 		if (list != null && !list.isEmpty()) {
 			return list.get(0);
 		} else {

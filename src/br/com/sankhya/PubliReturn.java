@@ -30,8 +30,8 @@ public class PubliReturn {
 
 	public static void main(String[] args) throws SQLException {
 		cookieAmpla = new PubliAmplaServiceHelper().getPublicookie();
-		cookieBg9PE = new PubliBg9PEServiceHelper().getPublicookie();
-		cookieBg9AL = new PubliBg9ALServiceHelper().getPublicookie();
+		//cookieBg9PE = new PubliBg9PEServiceHelper().getPublicookie();
+		//cookieBg9AL = new PubliBg9ALServiceHelper().getPublicookie();
 
 		System.out.println("Iniciando o processo de atualização de Status no Publi.");
 
@@ -41,32 +41,24 @@ public class PubliReturn {
 		PreparedStatement pstmt = null;
 
 		String query = "SELECT DISTINCT "
-//				+ "CASE WHEN ITE.CODPROD IN (661, 662, 671, 674,675) THEN ? ELSE ? END AS TIPODOC, "
-//				+ "CAB.NUMNOTA AS DOCUMENTO, "
 				+ "CAB.NUMNFSE AS FATURA,"
 				+ "CAB.NUNOTA AS NUNOTA, "
 				+ "CAB.CODTIPOPER AS TOP, "
 				+ "TO_CHAR(CAB.DTFATUR, 'YYYY-MM-DD') AS DTSITUACAO, "
-//				+ "CAB.AD_PIXOC AS PIXOC, "
 				+ "CASE WHEN CAB.CODEMP IN (2,3,6) THEN 'Ampla' WHEN CAB.CODEMP = 4 THEN 'BG9 PE' WHEN CAB.CODEMP = 5 THEN 'BG9 AL' ELSE '' END EMPRESA, "
 				+ "CASE WHEN EXISTS (SELECT 1 FROM TGFCAN CAN, TGFCAB_EXC EXC WHERE CAN.NUNOTA = EXC.NUNOTA AND EXC.TIPMOV IN ('V') AND CAN.NUNOTA = CAB.NUNOTA) THEN 'CANCELADA' ELSE 'FATURADA' END STATUS "
 				+ "FROM TGFCAB CAB "
 				+ "INNER JOIN TGFITE ITE ON (ITE.NUNOTA = CAB.NUNOTA) "
-				+ "WHERE (CAB.DTFATUR BETWEEN ? AND ?) AND CAB.TIPMOV = ? AND CAB.AD_PUBLI IS NULL AND CAB.AD_PIXOC IS NOT NULL";
+				+ "WHERE (TRUNC(CAB.DTFATUR) BETWEEN ? AND ?) AND CAB.TIPMOV = ? AND CAB.AD_PUBLI IS NULL AND CAB.AD_PIXOC IS NOT NULL";
+//				+ "  and cab.nunota = 43722";
 		
-//		String query = "SELECT DISTINCT CASE WHEN ITE.CODPROD IN (661, 662, 671, 674,675) THEN ? "
-//				+ "ELSE ? END AS TIPODOC, CAB.NUMNOTA AS DOCUMENTO, CAB.NUMNFSE AS FATURA,CAB.NUNOTA AS NUNOTA, CAB.CODTIPOPER AS TOP, "
-//				+ "TO_CHAR(CAB.DTFATUR, 'YYYY-MM-DD') AS DTSITUACAO, CAB.AD_PIXOC AS PIXOC FROM TGFCAB CAB INNER JOIN TGFITE ITE ON (ITE.NUNOTA = CAB.NUNOTA) "
-//				+ "WHERE (CAB.DTFATUR BETWEEN ? AND ?) AND CAB.TIPMOV = ? AND CAB.AD_PIXOC IS NOT NULL and CAB.ad_pixoc=48066";
-
 		try {
 
 			conn = JdbcOracleConnection.getDBConnection();
 
 			pstmt = conn.prepareStatement(query);
 
-//			pstmt.setString(1, "PI");
-//			pstmt.setString(2, "OC");
+			//System.out.println();
 			pstmt.setDate(1, new java.sql.Date(Utils.GetInvoicedOrderIntervalDateDDMMYYYY().getTime()));
 			pstmt.setDate(2, new java.sql.Date(Utils.GetDateTimeNowDDMMYYY().getTime()));
 			pstmt.setString(3, "V");

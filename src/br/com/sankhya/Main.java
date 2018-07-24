@@ -1,7 +1,6 @@
 package br.com.sankhya;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import br.com.sankhya.common.Utils;
 import br.com.sankhya.domain.Customer;
@@ -19,16 +18,16 @@ public class Main {
 	private static final String jivaCookie = JivaServiceHelper.LogIn();
 	private static final int amplaPE = 1;
 
-	public static void main(String[] args) {
 
+	public static void main(String[] args) {
+		
 		try {
 			System.out.println("Iniciar processo de importação...\n\n");
 			
-//			System.out.println(Utils.ConvertMSJSONDateToDate("/Date(1513908000000-0200)/"));
-			
-			Ampla();
-			ImportBg9PEOrders.Bg9PE();
-			ImportBg9ALOrders.Bg9AL();
+			//Ampla();
+			//ImportBg9PEOrders.Bg9PE();
+			ImportPubliOrders.Publi();
+			//ImportBg9ALOrders.Bg9AL(); // não mais usado.
 			
 			System.out.println("\n\n...Processo Finalizado.");
 
@@ -41,9 +40,9 @@ public class Main {
 	public static void Ampla() throws Exception {
 
 		try {
-
-			InsertFixedBudgets();
-			InsertPublicationAuth();
+			
+			//InsertFixedBudgets();
+			//InsertPublicationAuth();
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -120,7 +119,9 @@ public class Main {
 					item.setEmpresa(RelationCompany(item.getEmpresa()));
 					
 					for (MediaOrderInstallment parcela : pesqParcelaLista) {
-						if(ValidaParcela(parcela)) {
+						if (!Utils.ValidaParcela(parcela)) {
+							continue;
+						}
 
 							if (!JivaServiceHelper.VerifyIfOrderExistsByNUMNOTA( Integer.toString(item.getPlanilhaNumero()),
 									jivaCookie,
@@ -140,7 +141,6 @@ public class Main {
 
 							}
 							
-						}
 						
 					}
 
@@ -154,11 +154,6 @@ public class Main {
 
 	}
 
-	private static boolean ValidaParcela(MediaOrderInstallment parcela) {
-		// Valida a situação da parcela
-		return "L".equals(parcela.getSituacaoDB());
-	}
-
 	/**
 	 * Insere as OCs no Portal de Vendas
 	 */
@@ -167,8 +162,6 @@ public class Main {
 		try {
 
 			ArrayList<FixedBudget> budgetList = amplaServices.GetFixedBudgetList();
-			
-			//System.out.println(budgetList.size());
 			
 			for (FixedBudget item : budgetList) {
 				Customer customer = amplaServices.GetCustomerById(item.getCodigoCliente());
@@ -205,6 +198,7 @@ public class Main {
 
 						item.setEmpresa(RelationCompany(item.getEmpresa()));
 
+						
 						InsertProductionOrders(item.getNumero(), item.getTipoFaturamento(), customerId);
 
 						JivaServiceHelper.InsertFixedBudget(item, jivaCookie, customerId, amplaServices);

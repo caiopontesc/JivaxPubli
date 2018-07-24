@@ -81,6 +81,15 @@ public class Item {
 	private double ValorFornecedorUnitario;
 	private double ValorOriginal;
 	private double ValorUnitario;
+	private double ValorLiquido;  // Lenilton 25 de fevereiro de 2018
+
+	public double getValorLiquido() {
+		return ValorLiquido;
+	}
+
+	public void setValorLiquido(double valorLiquido) {
+		ValorLiquido = valorLiquido;
+	}
 
 	public boolean isChecked() {
 		return Checked;
